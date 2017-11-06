@@ -1,6 +1,6 @@
 org	0x100000			; Kernel starts at 1 MB
 bits	32			; 32 bit code
- 
+
 jmp	Stage3			; jump to stage 3
  
 %include "./lib/stdio.inc"
@@ -12,8 +12,6 @@ Stage3:
 	;-------------------------------;
 	;   Set registers		        ;
 	;-------------------------------;
-    cli
-    hlt
  
 	mov		ax, 0x10		; set data segments to data selector (0x10)
 	mov		ds, ax
