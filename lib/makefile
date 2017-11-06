@@ -1,0 +1,1 @@
+lib: lib/A20.inc lib/gdt.inc lib/stdio.inc lib/fat12.inc
