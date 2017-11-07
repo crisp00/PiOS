@@ -1,8 +1,8 @@
 bits 32
 
-extern __krnl_main
+extern krnl_main
 
+global _start
 _start:
 mov esp, 0x110000
-call __krnl_main
-
+call krnl_main
