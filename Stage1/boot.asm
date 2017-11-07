@@ -42,12 +42,12 @@ LBACHS:
 
 ; Convert Cluster to LBA
 ClusterLBA:
-    sub ax, 0x0002                                  ; zero base cluster number
-    xor cx, cx
-    mov cl, BYTE [bpbSectorsPerCluster]             ; convert byte to WORD
-    mul cx
-    add ax, WORD [datasector]                       ; base data sector
-    ret
+        sub ax, 0x0002                                  ; zero base cluster number
+        xor cx, cx
+        mov cl, BYTE [bpbSectorsPerCluster]             ; convert byte to WORD
+        mul cx
+        add ax, WORD [datasector]                       ; base data sector
+        ret
 
 ; Prints a string
 ; DS=>SI: 0 terminated string

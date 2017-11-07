@@ -6,11 +6,11 @@
 ====================================================
 */
 
-extern void _cdecl main ();
-extern void _cdecl InitializeConstructors();
-extern void _cdecl Exit ();
+extern void main ();
+extern void InitializeConstructors();
+extern void Exit ();
 
-void _cdecl kernel_entry () {
+void kernel_entry () {
 
 #ifdef ARCH_X86
 	_asm {

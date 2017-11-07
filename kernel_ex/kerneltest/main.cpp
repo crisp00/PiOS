@@ -7,7 +7,7 @@
 
 #include "DebugDisplay.h"
 
-void _cdecl main () {
+void main () {
 
 	int i=0x12;
 
