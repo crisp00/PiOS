@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include "../stdlib/include/stdio.h"
+#include "../stdlib/include/txtmode.h"
 
 #if defined(__linux__)
 #error "You are not using a cross-compiler, you will most certainly run into trouble"
@@ -18,38 +19,17 @@
 extern "C" /* Use C linkage for kernel_main. */
 #endif
 void krnl_main(void){
-
-    for(size_t i = 0; i < 1000000000; i++){
-        __asm__("nop");
-        __asm__("nop");
-        __asm__("nop");
-        __asm__("nop");
-        __asm__("nop");
-        __asm__("nop");
-        __asm__("nop");
-        __asm__("nop");
-        __asm__("nop");
-        __asm__("nop");
-        __asm__("nop");
-        __asm__("nop");
-        __asm__("nop");
-        __asm__("nop");
-        __asm__("nop");
-        __asm__("nop");
-        __asm__("nop");
-        __asm__("nop");
-        __asm__("nop");
+    txt_setcolor(TXT_COLOR_MAGENTA, TXT_COLOR_WHITE);
+    txt_clearscreen();
+    printf("PiOS kernel is up and running\n");
+    printf("Newline is working as expected\n");
+    printf("Next steps:\n");
+    printf("    - implement printf\n");
+    printf("    - implement kbd input and scanf\n");
+    printf("    - implement interrupts and exception handling\n");
+    printf("YAY!");
+    while(true){
         __asm__("nop");
     }
-
-    uint8_t color = 0x40;
-    uint16_t* vidmem = (uint16_t*) 0xB8000;
-    for(size_t y = 0; y < 25; y++){
-        for(size_t x = 0; x < 80; x++){
-            vidmem[y * 80 + x] = 0xf020;
-        }
-    }
-    printf(32);
-    __asm__("cli\n\t"
-            "hlt\n\t");
+    return;
 }

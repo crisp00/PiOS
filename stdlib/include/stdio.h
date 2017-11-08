@@ -2,4 +2,4 @@
 #include <stdint.h>
 #include <stdarg.h>
 
-void printf(int num, ... );
+void printf(const char* str);

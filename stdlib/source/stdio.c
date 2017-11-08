@@ -1,5 +1,6 @@
 #include "../include/stdio.h"
+#include "../include/txtmode.h"
 
-void printf(int num, ... ){
-
+void printf(const char* str){
+    txt_putstring(str);
 }
