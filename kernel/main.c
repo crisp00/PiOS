@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include "../stdlib/include/stdio.h"
 #include "../stdlib/include/txtmode.h"
+#include "../stdlib/include/keyboard.h"
 
 #if defined(__linux__)
 #error "You are not using a cross-compiler, you will most certainly run into trouble"
@@ -18,6 +19,7 @@
 #if defined(__cplusplus)
 extern "C" /* Use C linkage for kernel_main. */
 #endif
+char* tmp;
 void krnl_main(void){
     txt_setcolor(TXT_COLOR_MAGENTA, TXT_COLOR_WHITE);
     txt_clearscreen();
@@ -27,9 +29,18 @@ void krnl_main(void){
     printf("    - implement printf\n");
     printf("    - implement kbd input and scanf\n");
     printf("    - implement interrupts and exception handling\n");
-    printf("YAY!");
-    while(true){
-        __asm__("nop");
+    printf("YAY!\n");
+    printf("Come ti chiami? ");
+    char *p = kbd_getstring(tmp);
+    printf("Ti chiami ");
+    printf(p);
+
+    while(1){
+        char *t = kbd_getstring(tmp);
+        printf(t);
     }
+
+
+    __asm__("cli\n\rhlt");
     return;
 }

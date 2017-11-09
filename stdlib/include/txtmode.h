@@ -8,6 +8,8 @@
 #include <stdbool.h> /* C doesn't have booleans by default. */
 #endif
 
+#include "../include/hwio.h"
+
 enum txt_color {
 	TXT_COLOR_BLACK = 0,
 	TXT_COLOR_BLUE = 1,
