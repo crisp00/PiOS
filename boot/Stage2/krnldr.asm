@@ -7,6 +7,8 @@ jmp main
 %include "./boot/lib/gdt.inc"
 %include "./boot/lib/A20.inc"
 %include "./boot/lib/fat12.inc"
+%include "./boot/lib/memory.inc"
+%include "./boot/lib/bootinfo.inc"
 
 ; where the kernel is to be loaded to in protected mode
 %define KERNEL_PMODE_BASE 0x100000
@@ -16,6 +18,32 @@ jmp main
 msgFound db "Kernel found", 0x0A, 0x0
 msgStart db "Loading kernel", 0x0A, 0x0
 msgFailure db "Something went wrong :(", 0x0A, 0x0
+
+    boot_info:
+istruc multiboot_info
+	at multiboot_info.flags,			dd 0
+	at multiboot_info.memoryLo,			dd 0
+	at multiboot_info.memoryHi,			dd 0
+	at multiboot_info.bootDevice,		dd 0
+	at multiboot_info.cmdLine,			dd 0
+	at multiboot_info.mods_count,		dd 0
+	at multiboot_info.mods_addr,		dd 0
+	at multiboot_info.syms0,			dd 0
+	at multiboot_info.syms1,			dd 0
+	at multiboot_info.syms2,			dd 0
+	at multiboot_info.mmap_length,		dd 0
+	at multiboot_info.mmap_addr,		dd 0
+	at multiboot_info.drives_length,	dd 0
+	at multiboot_info.drives_addr,		dd 0
+	at multiboot_info.config_table,		dd 0
+	at multiboot_info.bootloader_name,	dd 'PiOS'
+	at multiboot_info.apm_table,		dd 0
+	at multiboot_info.vbe_control_info,	dd 0
+	at multiboot_info.vbe_mode_info,	dw 0
+	at multiboot_info.vbe_interface_seg,dw 0
+	at multiboot_info.vbe_interface_off,dw 0
+	at multiboot_info.vbe_interface_len,dw 0
+iend
 
     ; Adjust segment registers
     main:    
@@ -29,12 +57,28 @@ msgFailure db "Something went wrong :(", 0x0A, 0x0
         mov sp, 0FFFFh
         sti
 
-        ; load GDT
-        call installGDT
 
         ; Enable A20
         call EnableA20_KKbrd_Out
         call EnableA20_Bios
+
+        ; load GDT
+        call installGDT
+
+        xor eax, eax
+        xor ebx, ebx
+        call BiosGetMemorySize64MB
+    	mov dword [boot_info+multiboot_info.bootDevice], 69
+
+        mov	word [boot_info+multiboot_info.memoryHi], bx
+	    mov	word [boot_info+multiboot_info.memoryLo], ax
+
+        mov	eax, 0x0
+        mov	ds, ax
+        mov	di, 0x1000
+        call BiosGetMemoryMap
+        mov word [boot_info+multiboot_info.mmap_length], mmtmp
+        mov [boot_info+multiboot_info.mmap_addr], di
 
          ; load the kernel
         call LoadRoot                                           ; load the root directory
@@ -90,6 +134,10 @@ msgFailure db "Something went wrong :(", 0x0A, 0x0
         mov edi, KERNEL_PMODE_BASE
         mov ecx, eax
         rep movsd
+
+        push dword boot_info
+        mov ebx, dword boot_info
+
         jmp CODE_DESC:KERNEL_PMODE_BASE
        
 
