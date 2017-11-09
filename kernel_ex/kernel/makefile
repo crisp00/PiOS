@@ -1,1 +1,0 @@
-kernel/build/main.obj:	main.cpp
