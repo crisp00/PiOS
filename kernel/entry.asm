@@ -11,7 +11,7 @@ _start:
 pop dword eax
 mov esp, stack_top
 mov dword [lol], dword eax
-push dword lol
+push dword [lol]
 call krnl_main
 
 lol: dd 32
