@@ -41,36 +41,45 @@ struct multiboot_info {
     uint16_t	m_vbe_interface_len;
 };
 
-struct mmap_entry{
+typedef struct mmap_entry{
     uint64_t base_address;
     uint64_t size;
     uint32_t type;
     uint32_t attributes;
-};
+} mmap_entry_t;
 
 #if defined(__cplusplus)
 extern "C" /* Use C linkage for kernel_main. */
 #endif
 char* tmp;
 void krnl_main(struct multiboot_info *bootinfo){
-    struct mmap_entry *mmap;    
+    mmap_entry_t *mmap;  
+    mmap_entry_t *current_entry;  
     txt_setcolor(TXT_COLOR_MAGENTA, TXT_COLOR_WHITE);
     txt_clearscreen();
     printf("Low Memory: ");
-    printf(itoa(bootinfo->m_memoryLo, tmp));
+    printf(itoa(bootinfo->m_memoryLo, 10, tmp));
     printf("\nHigh Memory: ");
-    printf(itoa(bootinfo->m_memoryHi, tmp));
+    printf(itoa(bootinfo->m_memoryHi, 10, tmp));
     printf("\nBoot Device: ");
-    printf(itoa(bootinfo->m_bootDevice, tmp));
+    printf(itoa(bootinfo->m_bootDevice, 10, tmp));
     printf("\nLength of Memory Map: ");
-    printf(itoa(bootinfo->m_mmap_length, tmp));
+    printf(itoa(bootinfo->m_mmap_length, 10, tmp));
     printf("\nBase address of Memory Map");
-    printf(itoa(bootinfo->m_mmap_addr, tmp));
-    printf("\nFirst Entry:");
-    mmap = (struct mmap_entry*) (bootinfo->m_mmap_addr);
-    printf("First Entry Base Address: ");
-    printf(itoa(mmap->base_address, tmp));
-    //printf(itoa(&bootinfo, tmp));
+    printf(itoa(bootinfo->m_mmap_addr, 10, tmp));
+    mmap = (mmap_entry_t*) (bootinfo->m_mmap_addr);
+    current_entry = mmap;
+    uint64_t sum = 0;
+    for(size_t i = 0; i < 8; i++){
+    sum += current_entry->base_address;
+    printf("\nFirst Entry Base Address: ");
+    printf(itoa(current_entry->base_address, 10, tmp));
+    printf(itoa(*(&current_entry->base_address + 4), 10, tmp));
+
+    current_entry++;
+}
+
+    printf(itoa(sum, 2, tmp));
     printf("\n");
     printf("PiOS kernel is up and running\n");
     printf("Newline is working as expected\n");

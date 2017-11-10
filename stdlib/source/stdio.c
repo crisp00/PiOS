@@ -4,26 +4,42 @@
 void printf(const char* str){
     txt_putstring(str);
 }
+char tbuf[32];
+char bchars[] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 
-char* itoa(int i, char b[]){
-    char const digit[] = "0123456789";
-    char* p = b;
-    if(i<0){
-        *p++ = '-';
-        i *= -1;
-    }
-    int shifter = i;
-    do{ //Move to where representation ends
-        ++p;
-        shifter = shifter/10;
-    }while(shifter);
-    *p = '\0';
-    do{ //Move back, inserting digits as u go
-        *--p = digit[i%10];
-        i = i/10;
-    }while(i);
-    return b;
+char *itoa(unsigned i,unsigned base,char* buf) {
+   int pos = 0;
+   int opos = 0;
+   int top = 0;
+
+   if (i == 0 || base > 16) {
+      buf[0] = '0';
+      buf[1] = '\0';
+      return;
+   }
+
+   while (i != 0) {
+      tbuf[pos] = bchars[i % base];
+      pos++;
+      i /= base;
+   }
+   top=pos--;
+   for (opos=0; opos<top; pos--,opos++) {
+      buf[opos] = tbuf[pos];
+   }
+   buf[opos] = 0;
+   return buf;
 }
+
+char *itoa_s(int i,unsigned base,char* buf) {
+   if (base > 16) return;
+   if (i < 0) {
+      *buf++ = '-';
+      i *= -1;
+   }
+   return itoa(i,base,buf);
+}
+
 
 char* strcat(char *dest, const char* src)
 {
