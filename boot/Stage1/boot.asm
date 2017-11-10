@@ -17,7 +17,7 @@ bpbSectorsPerTrack      dw 18
 bpbNumberOfHeads        dw 2
 bpbHiddenSectors        dd 0
 bpbLargeNumberOfSectors dd 0
-bpbDriveNumber          db 0
+bpbDriveNumber          db 0x80
 bpbReserved             db 0
 bpbSignature            db 0x29
 bpbSerialNumber         dd 0xa0a1a2a3

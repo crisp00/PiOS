@@ -16,7 +16,7 @@ bpbSectorsPerTrack: 	DW 18
 bpbHeadsPerCylinder: 	DW 2
 bpbHiddenSectors: 	DD 0
 bpbTotalSectorsBig:     DD 0
-bsDriveNumber: 	        DB 0
+bsDriveNumber: 	        DB 0x80
 bsUnused: 		DB 0
 bsExtBootSignature: 	DB 0x29
 bsSerialNumber:	        DD 0xa0a1a2a3

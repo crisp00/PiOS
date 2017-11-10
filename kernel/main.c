@@ -42,8 +42,10 @@ struct multiboot_info {
 };
 
 typedef struct mmap_entry{
-    uint64_t base_address;
-    uint64_t size;
+    uint32_t base_address_low;
+    uint32_t base_address_high;
+    uint32_t size_low;
+    uint32_t size_high;
     uint32_t type;
     uint32_t attributes;
 } mmap_entry_t;
@@ -63,39 +65,35 @@ void krnl_main(struct multiboot_info *bootinfo){
     printf(itoa(bootinfo->m_memoryHi, 10, tmp));
     printf("\nBoot Device: ");
     printf(itoa(bootinfo->m_bootDevice, 10, tmp));
-    printf("\nLength of Memory Map: ");
+    printf("\nEntries in Memory Map: ");
     printf(itoa(bootinfo->m_mmap_length, 10, tmp));
-    printf("\nBase address of Memory Map");
+    printf("\nBase: ");
     printf(itoa(bootinfo->m_mmap_addr, 10, tmp));
+    printf("\n\nENTRY|MEMORY_HIGH|MEMORY_LOW|SIZE_HIGH|SIZE_LOW|TYPE\n");
     mmap = (mmap_entry_t*) (bootinfo->m_mmap_addr);
     current_entry = mmap;
-    uint64_t sum = 0;
-    for(size_t i = 0; i < 8; i++){
-    sum += current_entry->base_address;
-    printf("\nFirst Entry Base Address: ");
-    printf(itoa(current_entry->base_address, 10, tmp));
-    printf(itoa(*(&current_entry->base_address + 4), 10, tmp));
-
-    current_entry++;
-}
-
-    printf(itoa(sum, 2, tmp));
-    printf("\n");
-    printf("PiOS kernel is up and running\n");
-    printf("Newline is working as expected\n");
-    printf("Next steps:\n");
-    printf("    - implement printf\n");
-    printf("    - implement kbd input and scanf\n");
-    printf("    - implement interrupts and exception handling\n");
-    printf("YAY!\n");
-    printf("Come ti chiami? ");
-    char *p = kbd_getstring(tmp);
-    printf("Ti chiami ");
-    printf(p);
-
+    for(size_t i = 0; i < bootinfo->m_mmap_length; i++){
+        printf("#");
+        printf(itoa(i, 10, tmp));
+        printf("    0x");
+        printf(itoa(current_entry->base_address_high, 16, tmp));
+        printf(" 0x");
+        printf(itoa(current_entry->base_address_low, 16, tmp));
+        printf(" 0x");
+        printf(itoa(current_entry->size_high, 16, tmp));
+        printf(" 0x");
+        printf(itoa(current_entry->size_low, 16, tmp));
+        printf(" TYPE:  ");
+        printf(itoa(current_entry->type, 10, tmp));
+        printf(" IGNORE: ");
+        printf(itoa(current_entry->attributes & 1, 2, tmp));
+        printf("\n");
+        current_entry++; 
+    }
+    int i = 0;
     while(1){
-        char *t = kbd_getstring(tmp);
-        printf(t);
+        kbd_getscancode();
+        i++;
     }
 
 

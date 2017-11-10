@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "txtmode.h": "c"
+        "txtmode.h": "c",
+        "keyboard.h": "c"
     }
 }

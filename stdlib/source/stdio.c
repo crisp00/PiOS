@@ -14,8 +14,8 @@ char *itoa(unsigned i,unsigned base,char* buf) {
 
    if (i == 0 || base > 16) {
       buf[0] = '0';
-      buf[1] = '\0';
-      return;
+      buf[1] = 0;
+      return buf;
    }
 
    while (i != 0) {
