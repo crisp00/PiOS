@@ -11,13 +11,13 @@ bpbReservedSectors      dw 1
 bpbNumberOfFATs         db 2
 bpbRootEntries          dw 224
 bpbNumberOfSectors      dw 2880
-bpbMediaDescriptor      db 0xF0
+bpbMediaDescriptor      db 0xF8
 bpbSectorsPerFat        dw 9
 bpbSectorsPerTrack      dw 18
 bpbNumberOfHeads        dw 2
 bpbHiddenSectors        dd 0
 bpbLargeNumberOfSectors dd 0
-bpbDriveNumber          db 0x80
+bpbDriveNumber          db 0x0
 bpbReserved             db 0
 bpbSignature            db 0x29
 bpbSerialNumber         dd 0xa0a1a2a3

@@ -29,7 +29,7 @@ struct multiboot_info {
     uint32_t	m_syms2;
     uint32_t	m_mmap_length;
     uint32_t	m_mmap_addr;
-    uint32_t	m_drives_length;
+    uint32_t	m_drives_letngth;
     uint32_t	m_drives_addr;
     uint32_t	m_config_table;
     uint32_t	m_bootloader_name;
