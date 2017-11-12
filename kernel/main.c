@@ -6,6 +6,7 @@
 #include "../stdlib/include/stdio.h"
 #include "../stdlib/include/txtmode.h"
 #include "../stdlib/include/keyboard.h"
+#include "./physmmngr.h"
 
 #if defined(__linux__)
 #error "You are not using a cross-compiler, you will most certainly run into trouble"
@@ -41,14 +42,7 @@ struct multiboot_info {
     uint16_t	m_vbe_interface_len;
 };
 
-typedef struct mmap_entry{
-    uint32_t base_address_low;
-    uint32_t base_address_high;
-    uint32_t size_low;
-    uint32_t size_high;
-    uint32_t type;
-    uint32_t attributes;
-} mmap_entry_t;
+extern void* krnlend;
 
 #if defined(__cplusplus)
 extern "C" /* Use C linkage for kernel_main. */
@@ -61,9 +55,9 @@ void krnl_main(struct multiboot_info *bootinfo){
     txt_clearscreen();
     printf("Low Memory: ");
     printf(itoa(bootinfo->m_memoryLo, 10, tmp));
-    printf("\nHigh Memory: ");
-    printf(itoa(bootinfo->m_memoryHi, 10, tmp));
-    printf("\nBoot Device: ");
+    printf("Kb\nHigh Memory: ");
+    printf(itoa(bootinfo->m_memoryHi / 16384, 10, tmp));
+    printf("Gb\nBoot Device: ");
     printf(itoa(bootinfo->m_bootDevice, 10, tmp));
     printf("\nEntries in Memory Map: ");
     printf(itoa(bootinfo->m_mmap_length, 10, tmp));
@@ -90,6 +84,19 @@ void krnl_main(struct multiboot_info *bootinfo){
         printf("\n");
         current_entry++; 
     }
+    printf("Kernel End Address: 0x");
+    printf(itoa(&krnlend, 16, tmp));
+
+    pmmngr_init(bootinfo->m_memoryHi * 64 + bootinfo->m_memoryLo + 1024, &krnlend + 512);
+    pmmngr_load_biosmmap(mmap, bootinfo->m_mmap_length);
+    printf("\nTotal blocks: ");
+    printf(itoa(_pmmngr_max_blocks, 10, tmp));
+    printf("\nFree blocks: ");
+    printf(itoa(_pmmngr_free_blocks, 10, tmp));
+    printf("\nUsed blocks: ");
+    printf(itoa(_pmmngr_used_blocks, 10, tmp));
+
+
     int i = 0;
     while(1){
         kbd_getscancode();

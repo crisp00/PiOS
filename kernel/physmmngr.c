@@ -8,20 +8,37 @@
 #define PMMNGR_BLOCK_ALIGN	PMMNGR_BLOCK_SIZE
 
 // size of physical memory
-static	uint32_t	_pmmngr_memory_size=0;
+uint32_t _pmmngr_memory_size=0;
 // number of blocks currently in use
-static	uint32_t	_pmmngr_used_blocks=0;
+uint32_t _pmmngr_used_blocks=0;
+// number of free blocks
+uint32_t _pmmngr_free_blocks=0;
 // maximum number of available memory blocks
-static	uint32_t	_pmmngr_max_blocks=0;
+uint32_t _pmmngr_max_blocks=0;
 // memory map bit array. Each bit represents a memory block
-static	uint32_t*	_pmmngr_memory_map= 0;
+uint32_t* _pmmngr_memory_map= 0;
 
-inline void pmmap_set (int bit) {
+void pmmap_set (int bit) {
+    uint32_t prev = _pmmngr_memory_map[bit / 32];
+
     _pmmngr_memory_map[bit / 32] |= (1 << (bit % 32));
+
+    if(prev == _pmmngr_memory_map[bit / 32]){
+        _pmmngr_used_blocks++;
+        _pmmngr_free_blocks--;
+    }
 }
 
-inline void pmmap_unset (int bit) {
+void pmmap_unset (int bit) {
+    uint32_t prev = _pmmngr_memory_map[bit / 32];
+
+
     _pmmngr_memory_map[bit / 32] &= ~ (1 << (bit % 32));
+
+    if(prev == _pmmngr_memory_map[bit / 32]){
+        _pmmngr_used_blocks--;
+        _pmmngr_free_blocks++;
+    }
 }
 
 inline bool pmmap_test (int bit) {
@@ -29,23 +46,45 @@ return _pmmngr_memory_map[bit / 32] &  (1 << (bit % 32));
 }
 
 int pmmap_first_free () {
-    // find the first free bit
-    for (uint32_t i=0; i< pmmngr_get_block_count() / 32; i++)
-        if (_mmngr_memory_map[i] != 0xffffffff)
-            for (int j=0; j<32; j++) {		// test each bit in the dword
 
-                int bit = 1 << j;
-                if (! (_mmngr_memory_map[i] & bit) )
-                    return i*4*8+j;
-            }
-
-    return -1;
 }
 
 void pmmngr_init (size_t memSize, physical_addr bitmap) {    
-    
+    _pmmngr_memory_map = (uint32_t*) bitmap;
+    _pmmngr_memory_size = memSize;
+    _pmmngr_max_blocks = memSize / (PMMNGR_BLOCK_SIZE / 1024);
+
+    for(size_t i = 0; i < _pmmngr_max_blocks / PMMNGR_BLOCKS_PER_BYTE / 4; i++){
+        _pmmngr_memory_map[i] = 1;
+        _pmmngr_used_blocks++;
+    }
+}
+
+void pmmngr_load_biosmmap(mmap_entry_t* mmap, size_t size){
+    mmap_entry_t* current_entry = mmap;
+    for(size_t i = 0; i < size; i++){
+        if(current_entry->type == 1 && current_entry->base_address_high == 0){
+            uint64_t base_addr = current_entry->base_address_low;
+            uint64_t length = current_entry->size_low + current_entry->size_high * 0x100000000;
+            for(size_t l = 0; l < length / PMMNGR_BLOCK_SIZE; l++){
+                int index = pmmngr_map_index(base_addr + l * PMMNGR_BLOCK_SIZE);
+                if(index < 131072){
+                    pmmap_unset(index);
+                }
+            }
+        }
+        current_entry++;
+    }
+}
+
+int pmmngr_map_index(uint64_t addr){
+   return addr / 4096;
+}
+
+int pmmngr_map_address(int index){
+    return index * 4096;
 }
 
 void pmmngr_init_region (physical_addr base, size_t size) {
-
+    
 }

@@ -4,3 +4,25 @@
 #include <stddef.h>
 #include <stdint.h>
 
+typedef struct mmap_entry{
+    uint32_t base_address_low;
+    uint32_t base_address_high;
+    uint32_t size_low;
+    uint32_t size_high;
+    uint32_t type;
+    uint32_t attributes;
+} mmap_entry_t;
+
+typedef uint32_t physical_addr;
+
+// number of blocks currently in use
+uint32_t _pmmngr_used_blocks;
+// number of free blocks
+uint32_t _pmmngr_free_blocks;
+// maximum number of available memory blocks
+uint32_t _pmmngr_max_blocks;
+
+
+
+void pmmngr_init (size_t memSize, physical_addr bitmap);
+void pmmngr_load_biosmmap(mmap_entry_t* mmap, size_t size);
