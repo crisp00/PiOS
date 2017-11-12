@@ -46,17 +46,22 @@ return _pmmngr_memory_map[bit / 32] &  (1 << (bit % 32));
 }
 
 int pmmap_first_free () {
-
+    for(size_t i = 0; i < _pmmngr_max_blocks; i++){
+        if(!pmmap_test(i))
+            return i;
+    }
 }
 
+//memSize in kb
 void pmmngr_init (size_t memSize, physical_addr bitmap) {    
     _pmmngr_memory_map = (uint32_t*) bitmap;
     _pmmngr_memory_size = memSize;
     _pmmngr_max_blocks = memSize / (PMMNGR_BLOCK_SIZE / 1024);
+    _pmmngr_free_blocks = _pmmngr_max_blocks;
 
-    for(size_t i = 0; i < _pmmngr_max_blocks / PMMNGR_BLOCKS_PER_BYTE / 4; i++){
-        _pmmngr_memory_map[i] = 1;
-        _pmmngr_used_blocks++;
+    for(size_t i = 0; i < _pmmngr_max_blocks; i++){
+        _pmmngr_memory_map[i / 32] &= ~ (1 << (i % 32));
+        pmmap_set(i);
     }
 }
 
@@ -66,7 +71,7 @@ void pmmngr_load_biosmmap(mmap_entry_t* mmap, size_t size){
         if(current_entry->type == 1 && current_entry->base_address_high == 0){
             uint64_t base_addr = current_entry->base_address_low;
             uint64_t length = current_entry->size_low + current_entry->size_high * 0x100000000;
-            for(size_t l = 0; l < length / PMMNGR_BLOCK_SIZE; l++){
+            for(size_t l = 0; l < (length / PMMNGR_BLOCK_SIZE) - 2; l++){
                 int index = pmmngr_map_index(base_addr + l * PMMNGR_BLOCK_SIZE);
                 if(index < 131072){
                     pmmap_unset(index);
@@ -85,6 +90,8 @@ int pmmngr_map_address(int index){
     return index * 4096;
 }
 
-void pmmngr_init_region (physical_addr base, size_t size) {
-    
+void *pmmngr_alloc_block(){
+    int block = pmmap_first_free();
+    pmmap_set(block);
+    return (void*)pmmngr_map_address(block);
 }

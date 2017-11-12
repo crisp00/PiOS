@@ -96,12 +96,17 @@ void krnl_main(struct multiboot_info *bootinfo){
     printf("\nUsed blocks: ");
     printf(itoa(_pmmngr_used_blocks, 10, tmp));
 
+    printf("\n\nFirst free block: 0x");
+    printf(itoa(pmmap_first_free() * 4096, 16, tmp));
 
-    int i = 0;
-    while(1){
-        kbd_getscancode();
-        i++;
-    }
+    void *block = pmmngr_alloc_block();
+    char *test = (char *)&block;
+    strcat(test, "\nHell! A string in an allocated block at 0x");
+    printf(test);
+    int p = &block;
+    printf(itoa((unsigned)&p, 16, tmp));
+    printf("\nNext free block: 0x");
+    printf(itoa(pmmngr_alloc_block(), 16, tmp));
 
 
     __asm__("cli\n\rhlt");

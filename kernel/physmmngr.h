@@ -26,3 +26,5 @@ uint32_t _pmmngr_max_blocks;
 
 void pmmngr_init (size_t memSize, physical_addr bitmap);
 void pmmngr_load_biosmmap(mmap_entry_t* mmap, size_t size);
+
+int pmmap_first_free ();
