@@ -1,6 +1,10 @@
 {
     "files.associations": {
         "txtmode.h": "c",
-        "keyboard.h": "c"
+        "keyboard.h": "c",
+        "idt.h": "c",
+        "stdint.h": "c",
+        "stddef.h": "c",
+        "stdio.h": "c"
     }
 }

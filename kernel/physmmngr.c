@@ -82,16 +82,17 @@ void pmmngr_load_biosmmap(mmap_entry_t* mmap, size_t size){
     }
 }
 
-int pmmngr_map_index(uint64_t addr){
+inline int pmmngr_map_index(uint64_t addr){
    return addr / 4096;
 }
 
-int pmmngr_map_address(int index){
+inline int pmmngr_map_address(int index){
     return index * 4096;
 }
 
 void *pmmngr_alloc_block(){
-    int block = pmmap_first_free();
-    pmmap_set(block);
-    return (void*)pmmngr_map_address(block);
+    int frame = pmmap_first_free();
+    pmmap_set(frame);
+    uint64_t addr = pmmngr_map_address(frame);
+    return (void*)addr;
 }

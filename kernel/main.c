@@ -7,6 +7,7 @@
 #include "../stdlib/include/txtmode.h"
 #include "../stdlib/include/keyboard.h"
 #include "./physmmngr.h"
+#include "./idt.h"
 
 #if defined(__linux__)
 #error "You are not using a cross-compiler, you will most certainly run into trouble"
@@ -48,11 +49,32 @@ extern void* krnlend;
 extern "C" /* Use C linkage for kernel_main. */
 #endif
 char* tmp;
+
+
+void default_int_handler(){
+    txt_setcolor(TXT_COLOR_WHITE, TXT_COLOR_BLACK);
+    txt_clearscreen();
+    printf("Holy Shit! It works!");
+    asm("cli\nhlt");
+}
+
+
 void krnl_main(struct multiboot_info *bootinfo){
     mmap_entry_t *mmap;  
     mmap_entry_t *current_entry;  
     txt_setcolor(TXT_COLOR_MAGENTA, TXT_COLOR_WHITE);
     txt_clearscreen();
+
+    IDTDescr_t i;
+    i = idt_init(default_int_handler);
+    printf(itoa(i.base_high * 0xffff, 16, tmp));
+    printf(" + ");
+    printf(itoa(i.base_low, 10, tmp));
+    printf("\n");
+    printf(itoa(i.selector, 2, tmp));
+    printf(" ");
+    printf(itoa(i.type_attr, 2, tmp));
+
     printf("Low Memory: ");
     printf(itoa(bootinfo->m_memoryLo, 10, tmp));
     printf("Kb\nHigh Memory: ");
@@ -87,7 +109,7 @@ void krnl_main(struct multiboot_info *bootinfo){
     printf("Kernel End Address: 0x");
     printf(itoa(&krnlend, 16, tmp));
 
-    pmmngr_init(bootinfo->m_memoryHi * 64 + bootinfo->m_memoryLo + 1024, &krnlend + 512);
+    pmmngr_init(bootinfo->m_memoryHi * 64 + bootinfo->m_memoryLo + 1024, &krnlend + 4096);
     pmmngr_load_biosmmap(mmap, bootinfo->m_mmap_length);
     printf("\nTotal blocks: ");
     printf(itoa(_pmmngr_max_blocks, 10, tmp));
@@ -99,16 +121,27 @@ void krnl_main(struct multiboot_info *bootinfo){
     printf("\n\nFirst free block: 0x");
     printf(itoa(pmmap_first_free() * 4096, 16, tmp));
 
-    void *block = pmmngr_alloc_block();
-    char *test = (char *)&block;
-    strcat(test, "\nHell! A string in an allocated block at 0x");
-    printf(test);
-    int p = &block;
-    printf(itoa((unsigned)&p, 16, tmp));
+    // void *block = pmmngr_alloc_block();
+    // char *test = (char *)&block;
+    // strcat(test, "\nHell! A string in an allocated block at 0x");
+    // printf(test);
+    // printf(itoa(&block, 16, tmp));
+
+    printf("\nAllocated one free block at: 0x");
+    int *block = (int *)pmmngr_alloc_block();
+    printf(itoa(&block, 16, tmp));
+
     printf("\nNext free block: 0x");
-    printf(itoa(pmmngr_alloc_block(), 16, tmp));
+    printf(itoa(pmmap_first_free(), 16, tmp));
 
-
-    __asm__("cli\n\rhlt");
+    char *asd = (char*)1;
+    strcat(asd, "Lol!\n");
+    printf(asd);
+    printf(itoa(&asd, 10, tmp));
+    for(uint64_t n = 0; n < 100000000; n++){
+        asm("nop");
+    }
+    __asm__("int $5");
+    __asm__("\ncli\n\rhlt");
     return;
 }
