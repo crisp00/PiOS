@@ -46,7 +46,7 @@ const char KBD_SCANCODES[] = {
 
 };
 
-char kbd_getscancode(){
+uint8_t kbd_getscancode(){
     char c=0;
     while(inb(0x64) % 2 == 0){
         __asm__("nop");

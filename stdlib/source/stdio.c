@@ -32,7 +32,7 @@ char *itoa(unsigned i,unsigned base,char* buf) {
 }
 
 char *itoa_s(int i,unsigned base,char* buf) {
-   if (base > 16) return;
+   if (base > 16) return 0;
    if (i < 0) {
       *buf++ = '-';
       i *= -1;

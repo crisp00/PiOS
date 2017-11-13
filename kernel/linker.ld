@@ -1,25 +1,16 @@
 OUTPUT_FORMAT("binary")
 ENTRY(_start)
-phys = 0x00100000;
 SECTIONS
 {
-  .text phys : AT(phys) {
-    code = .;
+  .text  0x100000 : {
     *(.text)
-    *(.rodata)
-    . = ALIGN(4096);
   }
-  .data : AT(phys + (data - code))
-  {
-    data = .;
+  .data  : {
     *(.data)
-    . = ALIGN(4096);
   }
-  .bss : AT(phys + (bss - code))
-  {
-    bss = .;
+  .bss  :
+  { 					
     *(.bss)
-    . = ALIGN(4096);
   }
   krnlend = .;
 }

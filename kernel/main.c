@@ -8,6 +8,7 @@
 #include "../stdlib/include/keyboard.h"
 #include "./physmmngr.h"
 #include "./idt.h"
+#include "./panic.h"
 
 #if defined(__linux__)
 #error "You are not using a cross-compiler, you will most certainly run into trouble"
@@ -44,7 +45,6 @@ struct multiboot_info {
 };
 
 extern void* krnlend;
-extern void _test();
 
 
 char* tmp;
@@ -57,102 +57,49 @@ static void  __attribute__ ((__cdecl__)) default_int_handler(){
     asm("cli\nhlt");
 }
 
+void pios_cool_shit(){
+    txt_setcolor(TXT_COLOR_CYAN, TXT_COLOR_BLUE);
+    printf("    ____  _ ____  _____\n");
+    printf("   / __ \\(_) __ \\/ ___/\n");
+    printf("  / /_/ / / / / /\\__ \\ \n");
+    printf(" / ____/ / /_/ /___/ / \n");
+    printf("/_/   /_/\\____//____/  \n");
+    printf("                       \n");
+}
+
 extern IDTRReg *_sidt;
+
+struct multiboot_info bi;
 
 #if defined(__cplusplus)
 extern "C" /* Use C linkage for kernel_main. */
 #endif
 void krnl_main(struct multiboot_info *bootinfo){
-    
+    bi = *bootinfo;
     mmap_entry_t *mmap;  
     mmap_entry_t *current_entry;  
-    txt_setcolor(TXT_COLOR_MAGENTA, TXT_COLOR_WHITE);
+    txt_setcolor(TXT_COLOR_CYAN, TXT_COLOR_WHITE);
     txt_clearscreen();
-    _test();
+    txt_gotoxy(0, 0);
+    pios_cool_shit();
+    txt_setcolor(TXT_COLOR_CYAN, TXT_COLOR_WHITE);
 
 
-    txt_gotoxy(5, 0);
+    printf("Installing IDT...\n");
+    idt_init((I86_IRQ_HANDLER)default_int_handler);
+    load_interrupts();
 
-    printf(" --- ");
-    IDTDescr_t i;
-    i = idt_init((I86_IRQ_HANDLER)default_int_handler);
-
-    printf(itoa((uint16_t)_sidt->table_limit, 0x16, tmp));
-    printf(itoa(i.base_high << 16, 16, tmp));
-    printf(" + ");
-    printf(itoa(i.base_low, 10, tmp));
-    printf("\n");
-    printf(itoa(i.selector, 2, tmp));
-    printf(" ");
-    printf(itoa(i.type_attr, 2, tmp));
-
-    printf("Low Memory: ");
-    printf(itoa(bootinfo->m_memoryLo, 10, tmp));
-    printf("Kb\nHigh Memory: ");
-    printf(itoa(bootinfo->m_memoryHi / 16384, 10, tmp));
-    printf("Gb\nBoot Device: ");
-    printf(itoa(bootinfo->m_bootDevice, 10, tmp));
-    printf("\nEntries in Memory Map: ");
-    printf(itoa(bootinfo->m_mmap_length, 10, tmp));
-    printf("\nBase: ");
-    printf(itoa(bootinfo->m_mmap_addr, 10, tmp));
-    printf("\n\nENTRY|MEMORY_HIGH|MEMORY_LOW|SIZE_HIGH|SIZE_LOW|TYPE\n");
+    printf("Preparing memory map...");
+    printf(itoa(bi.m_mmap_length, 10, tmp));
+    printf(" entries...\n");
     mmap = (mmap_entry_t*) (bootinfo->m_mmap_addr);
-    current_entry = mmap;
-    for(size_t i = 0; i < bootinfo->m_mmap_length; i++){
-        printf("#");
-        printf(itoa(i, 10, tmp));
-        printf("    0x");
-        printf(itoa(current_entry->base_address_high, 16, tmp));
-        printf(" 0x");
-        printf(itoa(current_entry->base_address_low, 16, tmp));
-        printf(" 0x");
-        printf(itoa(current_entry->size_high, 16, tmp));
-        printf(" 0x");
-        printf(itoa(current_entry->size_low, 16, tmp));
-        printf(" TYPE:  ");
-        printf(itoa(current_entry->type, 10, tmp));
-        printf(" IGNORE: ");
-        printf(itoa(current_entry->attributes & 1, 2, tmp));
-        printf("\n");
-        current_entry++; 
-    }
-    printf("Kernel End Address: 0x");
-    printf(itoa(&krnlend, 16, tmp));
-
-    pmmngr_init(bootinfo->m_memoryHi * 64 + bootinfo->m_memoryLo + 1024, &krnlend + 4096);
+    pmmngr_init(bootinfo->m_memoryHi * 64 + bootinfo->m_memoryLo + 1024, (physical_addr)&krnlend + 4096);
     pmmngr_load_biosmmap(mmap, bootinfo->m_mmap_length);
-    printf("\nTotal blocks: ");
-    printf(itoa(_pmmngr_max_blocks, 10, tmp));
-    printf("\nFree blocks: ");
-    printf(itoa(_pmmngr_free_blocks, 10, tmp));
-    printf("\nUsed blocks: ");
-    printf(itoa(_pmmngr_used_blocks, 10, tmp));
-
-    printf("\n\nFirst free block: 0x");
-    printf(itoa(pmmap_first_free() * 4096, 16, tmp));
-
-    // void *block = pmmngr_alloc_block();
-    // char *test = (char *)&block;
-    // strcat(test, "\nHell! A string in an allocated block at 0x");
-    // printf(test);
-    // printf(itoa(&block, 16, tmp));
-
-    printf("\nAllocated one free block at: 0x");
-    int *block = (int *)pmmngr_alloc_block();
-    printf(itoa(&block, 16, tmp));
-
-    printf("\nNext free block: 0x");
-    printf(itoa(pmmap_first_free(), 16, tmp));
-
-    char *asd = (char*)1;
-    strcat(asd, "Lol!\n");
-    printf(asd);
-    printf(itoa(&asd, 10, tmp));
-    for(uint64_t n = 0; n < 100000000; n++){
-        asm("nop");
+    printf("Done\n");
+    while(1){
+        kbd_getstring(tmp);
     }
-    __asm__("int $5");
-    __asm__("\ncli\n\rhlt");
+    printf("\nhalting");
+    __asm__("hlt");
     return;
 }

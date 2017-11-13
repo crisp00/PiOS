@@ -2,36 +2,38 @@
 #include "../stdlib/include/stdio.h"
 
 extern void _idt_load();
+extern void *_idt;
 
-IDTDescr_t idt_desc_table[I86_MAX_INTERRUPTS];
+IDTDescr_t *idt_desc_table;;
 IDTRReg idtr;
 
 char *tmp;
 
-IDTDescr_t idt_install_ir(int n, uint8_t type, uint16_t gdt_selector, I86_IRQ_HANDLER ir){
-    IDTDescr_t current = idt_desc_table[n];
+int idt_install_ir(int n, uint8_t type, uint16_t gdt_selector, I86_IRQ_HANDLER ir){
     physical_addr addr = (physical_addr)&(*ir);
-    current.base_low = (uint16_t)addr & 0xffff;
-    current.base_high = (uint16_t)(addr >> 16) & 0xffff;
-    current.reserved = 0;
-    current.type_attr = type;
-    current.selector = gdt_selector;
+    idt_desc_table[n].base_low = (uint16_t)addr & 0xffff;
+    idt_desc_table[n].base_high = (uint16_t)(addr >> 16) & 0xffff;
+    idt_desc_table[n].reserved = 0;
+    idt_desc_table[n].type_attr = type;
+    idt_desc_table[n].selector = gdt_selector;
 
-    return current;
+
+    return 0;
 }
 
 int idt_install(){
     _idt_load();
+    return 0;
 }
 
-IDTDescr_t idt_init(I86_IRQ_HANDLER default_handler){
-    IDTDescr_t r;
+int idt_init(I86_IRQ_HANDLER default_handler){
+    idt_desc_table = (IDTDescr_t*)&_idt;
     for(size_t d = 0; d < I86_MAX_INTERRUPTS; d++){
-        r = idt_install_ir(d, I86_INTATTR_DEFAULT, 0x08, default_handler);
+        idt_install_ir(d, I86_INTATTR_DEFAULT, 0x08, default_handler);
     }
-    idtr.table_addr = (uint32_t)&idt_desc_table;
+    idtr.table_addr = (uint32_t)idt_desc_table;
     idtr.table_limit = I86_MAX_INTERRUPTS * sizeof(IDTDescr_t) - 1;
 
     idt_install();
-    return r;
+    return 0;
 }

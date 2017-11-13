@@ -7,8 +7,15 @@ build/floppy.img: boot/Stage1/build/boot.bin boot/Stage2/build/KRNLDR.SYS kernel
 			sudo cp kernel/build/KRNL.SYS /media/pios
 			sudo umount /media/pios
 
+clean:
+	rm -f build/*
+	rm -f kernel/build/*
+	rm -f stdlib/build/*
+	rm -f hal/lib/*
+
 include ./boot/lib/makefile
 include ./boot/Stage1/makefile
 include ./boot/Stage2/makefile
 include ./kernel/makefile
 include ./stdlib/makefile
+include ./hal/makefile

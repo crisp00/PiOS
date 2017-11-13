@@ -14,7 +14,7 @@
 
 
 
-char kbd_getscancode();
+uint8_t kbd_getscancode();
 char* kbd_getstring(char* tmp);    
     
 

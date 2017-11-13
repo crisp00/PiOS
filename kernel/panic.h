@@ -1,0 +1,2 @@
+
+void load_interrupts();

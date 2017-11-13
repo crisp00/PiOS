@@ -5,6 +5,7 @@
         "idt.h": "c",
         "stdint.h": "c",
         "stddef.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "panic.h": "c"
     }
 }

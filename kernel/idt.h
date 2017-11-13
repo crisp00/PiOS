@@ -31,4 +31,5 @@ typedef void ( __attribute__ ((__cdecl__)) *I86_IRQ_HANDLER)(void);
 
 typedef void (*idt_ir)();
 
-IDTDescr_t idt_init(idt_ir default_handler);
+int idt_init(idt_ir default_handler);
+int idt_install_ir(int n, uint8_t type, uint16_t gdt_selector, I86_IRQ_HANDLER ir);

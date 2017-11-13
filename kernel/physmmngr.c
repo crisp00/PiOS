@@ -54,7 +54,7 @@ int pmmap_first_free () {
 
 //memSize in kb
 void pmmngr_init (size_t memSize, physical_addr bitmap) {    
-    _pmmngr_memory_map = (uint32_t*) bitmap;
+    _pmmngr_memory_map = (uint32_t*)&bitmap;
     _pmmngr_memory_size = memSize;
     _pmmngr_max_blocks = memSize / (PMMNGR_BLOCK_SIZE / 1024);
     _pmmngr_free_blocks = _pmmngr_max_blocks;
