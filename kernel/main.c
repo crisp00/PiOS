@@ -44,30 +44,41 @@ struct multiboot_info {
 };
 
 extern void* krnlend;
+extern void _test();
 
-#if defined(__cplusplus)
-extern "C" /* Use C linkage for kernel_main. */
-#endif
+
 char* tmp;
 
 
-void default_int_handler(){
+static void  __attribute__ ((__cdecl__)) default_int_handler(){
     txt_setcolor(TXT_COLOR_WHITE, TXT_COLOR_BLACK);
     txt_clearscreen();
     printf("Holy Shit! It works!");
     asm("cli\nhlt");
 }
 
+extern IDTRReg *_sidt;
 
+#if defined(__cplusplus)
+extern "C" /* Use C linkage for kernel_main. */
+#endif
 void krnl_main(struct multiboot_info *bootinfo){
+    
     mmap_entry_t *mmap;  
     mmap_entry_t *current_entry;  
     txt_setcolor(TXT_COLOR_MAGENTA, TXT_COLOR_WHITE);
     txt_clearscreen();
+    _test();
 
+
+    txt_gotoxy(5, 0);
+
+    printf(" --- ");
     IDTDescr_t i;
-    i = idt_init(default_int_handler);
-    printf(itoa(i.base_high * 0xffff, 16, tmp));
+    i = idt_init((I86_IRQ_HANDLER)default_int_handler);
+
+    printf(itoa((uint16_t)_sidt->table_limit, 0x16, tmp));
+    printf(itoa(i.base_high << 16, 16, tmp));
     printf(" + ");
     printf(itoa(i.base_low, 10, tmp));
     printf("\n");
