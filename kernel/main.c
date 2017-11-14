@@ -59,12 +59,9 @@ static void  __attribute__ ((__cdecl__)) default_int_handler(){
 
 void pios_cool_shit(){
     txt_setcolor(TXT_COLOR_CYAN, TXT_COLOR_BLUE);
-    printf("    ____  _ ____  _____\n");
-    printf("   / __ \\(_) __ \\/ ___/\n");
-    printf("  / /_/ / / / / /\\__ \\ \n");
-    printf(" / ____/ / /_/ /___/ / \n");
-    printf("/_/   /_/\\____//____/  \n");
-    printf("                       \n");
+    printf("  _____  _____  _____  _______\n");
+printf( " |_____]   |   |     | |______\n");
+printf( " |       __|__ |_____| ______|\n\n");
 }
 
 extern IDTRReg *_sidt;
