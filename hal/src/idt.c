@@ -1,5 +1,5 @@
-#include "./idt.h"
-#include "../stdlib/include/stdio.h"
+#include "../include/idt.h"
+#include "../../stdlib/include/stdio.h"
 
 extern void _idt_load();
 extern void *_idt;

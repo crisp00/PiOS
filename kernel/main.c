@@ -7,7 +7,7 @@
 #include "../stdlib/include/txtmode.h"
 #include "../stdlib/include/keyboard.h"
 #include "./physmmngr.h"
-#include "./idt.h"
+#include "../hal/include/idt.h"
 #include "./panic.h"
 
 #if defined(__linux__)
@@ -60,8 +60,8 @@ static void  __attribute__ ((__cdecl__)) default_int_handler(){
 void pios_cool_shit(){
     txt_setcolor(TXT_COLOR_CYAN, TXT_COLOR_BLUE);
     printf("  _____  _____  _____  _______\n");
-printf( " |_____]   |   |     | |______\n");
-printf( " |       __|__ |_____| ______|\n\n");
+    printf( " |_____]   |   |     | |______\n");
+    printf( " |       __|__ |_____| ______|\n\n");
 }
 
 extern IDTRReg *_sidt;

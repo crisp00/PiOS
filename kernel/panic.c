@@ -1,5 +1,5 @@
 #include "panic.h"
-#include "idt.h"
+#include "../hal/include/idt.h"
 #include "../stdlib/include/txtmode.h"
 #include "../stdlib/include/stdio.h"
 
