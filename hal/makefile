@@ -5,7 +5,7 @@ hSRC=$(wildcard hal/src/*.c)
 hOBJ=$(wildcard *.o)
 
 hal/lib/libpihal.a: $(hSRC)
-	i686-elf-gcc -c -xc $^ -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+	i686-elf-gcc -c -xc $^ -std=gnu99 -ffreestanding -O2 -Wall -Wextra -mgeneral-regs-only -mno-red-zone
 	ar rcs libpihal.a *.o  
 	rm *.o
 	mv libpihal.a hal/lib/

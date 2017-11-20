@@ -4,10 +4,20 @@
 extern void _idt_load();
 extern void *_idt;
 
-IDTDescr_t *idt_desc_table;;
+
+
+IDTDescr_t *idt_desc_table;
 IDTRReg idtr;
 
 char *tmp;
+
+
+void intstart(void){
+    __asm__("pushal");
+}
+
+void intret(void){
+}
 
 int idt_install_ir(int n, uint8_t type, uint16_t gdt_selector, I86_IRQ_HANDLER ir){
     physical_addr addr = (physical_addr)&(*ir);

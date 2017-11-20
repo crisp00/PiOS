@@ -21,3 +21,9 @@
 #define		I86_PIT_OCW_COUNTER_0		0	//00000000	//! Use when setting I86_PIT_OCW_MASK_COUNTER
 #define		I86_PIT_OCW_COUNTER_1		0x40	//01000000
 #define		I86_PIT_OCW_COUNTER_2		0x80	//10000000
+
+uint32_t _pit_ticks;
+struct interrupt_frame;
+
+__attribute__((interrupt)) void  i86_pit_irq (struct interrupt_frame *frame);
+void i86_pit_start(int hz);

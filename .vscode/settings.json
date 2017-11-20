@@ -6,6 +6,8 @@
         "stdint.h": "c",
         "stddef.h": "c",
         "stdio.h": "c",
-        "panic.h": "c"
+        "panic.h": "c",
+        "hal.h": "c",
+        "pic.h": "c"
     }
 }

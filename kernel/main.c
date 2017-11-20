@@ -7,7 +7,8 @@
 #include "../stdlib/include/txtmode.h"
 #include "../stdlib/include/keyboard.h"
 #include "./physmmngr.h"
-#include "../hal/include/idt.h"
+#include "../hal/include/hal.h"
+#include "../hal/include/pit.h"
 #include "./panic.h"
 
 #if defined(__linux__)
@@ -50,21 +51,15 @@ extern void* krnlend;
 char* tmp;
 
 
-static void  __attribute__ ((__cdecl__)) default_int_handler(){
-    txt_setcolor(TXT_COLOR_WHITE, TXT_COLOR_BLACK);
-    txt_clearscreen();
-    printf("Holy Shit! It works!");
-    asm("cli\nhlt");
-}
-
 void pios_cool_shit(){
     txt_setcolor(TXT_COLOR_CYAN, TXT_COLOR_BLUE);
-    printf("  _____  _____  _____  _______\n");
-    printf( " |_____]   |   |     | |______\n");
-    printf( " |       __|__ |_____| ______|\n\n");
-}
-
-extern IDTRReg *_sidt;
+    printf( "++---------------------------++\n");
+    printf( "|| #####       ####    ####  ||\n");
+    printf( "|| #    #  #  #    #  #      ||\n");
+    printf( "|| #####      #    #   ####  ||\n");
+    printf( "|| #       #  #    #       # || \n");
+    printf( "|| #       #   ####    ####  || \n");
+    printf( "++---------------------------++\n");}
 
 struct multiboot_info bi;
 
@@ -82,19 +77,28 @@ void krnl_main(struct multiboot_info *bootinfo){
     txt_setcolor(TXT_COLOR_CYAN, TXT_COLOR_WHITE);
 
 
-    printf("Installing IDT...\n");
-    idt_init((I86_IRQ_HANDLER)default_int_handler);
+
+    hal_init();
+
+
+
+    printf("Loading Interrupt Handlers...");
     load_interrupts();
+    printf("OK\n");
+
+    __asm__ ("sti"); 
 
     printf("Preparing memory map...");
     printf(itoa(bi.m_mmap_length, 10, tmp));
-    printf(" entries...\n");
+    printf(" entries...");
     mmap = (mmap_entry_t*) (bootinfo->m_mmap_addr);
     pmmngr_init(bootinfo->m_memoryHi * 64 + bootinfo->m_memoryLo + 1024, (physical_addr)&krnlend + 4096);
-    pmmngr_load_biosmmap(mmap, bootinfo->m_mmap_length);
-    printf("Done\n");
+    printf("OK\n");
+    //pmmngr_load_biosmmap(mmap, bootinfo->m_mmap_length);
+
     while(1){
-        kbd_getstring(tmp);
+        txt_gotoxy(38, 12);
+        printf(itoa(_pit_ticks, 10, tmp));
     }
     printf("\nhalting");
     __asm__("hlt");

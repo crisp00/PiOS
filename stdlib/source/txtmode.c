@@ -1,10 +1,13 @@
 #include "../include/txtmode.h"
 
-static size_t TXT_WIDTH = 80;
-static size_t TXT_HEIGHT = 25;
+#define TXT_WIDTH 80
+#define TXT_HEIGHT 25
+
 size_t cur_x, cur_y;
 size_t cur_modifier = 0x0f;
 uint16_t* vidmem = (uint16_t*) 0xB8000;
+uint16_t vidstack[TXT_WIDTH * TXT_HEIGHT];
+size_t stack_cur_x, stack_cur_y, stack_modifier;
 
 size_t strlen(const char* str) {
 	size_t len = 0;
@@ -102,4 +105,25 @@ void txt_putstring(const char* str){
 
     }
     update_cursor(cur_x, cur_y);
+}
+
+void txt_push_screen(){
+    stack_cur_x = cur_x;
+    stack_cur_y = cur_y;
+    stack_modifier = cur_modifier;
+    for(size_t y = 0; y < TXT_HEIGHT; y++){
+        for(size_t x = 0; x < TXT_WIDTH; x++){
+            vidstack[y * TXT_WIDTH + x] = vidmem[y * TXT_WIDTH + x];
+        }
+    }
+}
+
+void txt_pop_screen(){
+    for(size_t y = 0; y < TXT_HEIGHT; y++){
+        for(size_t x = 0; x < TXT_WIDTH; x++){
+            vidmem[y * TXT_WIDTH + x] = vidstack[y * TXT_WIDTH + x];
+        }
+    }
+    txt_gotoxy(stack_cur_x, stack_cur_y);
+    cur_modifier = stack_modifier;
 }

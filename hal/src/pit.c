@@ -1,24 +1,28 @@
 #include "../include/pit.h"
+#include "../../stdlib/include/hwio.h"
+#include "../../stdlib/include/txtmode.h"
+
 
 #define		I86_PIT_REG_COUNTER0		0x40
 #define		I86_PIT_REG_COUNTER1		0x41
 #define		I86_PIT_REG_COUNTER2		0x42
-#define		I86_PIT_REG_COMMAND		0x43
+#define		I86_PIT_REG_COMMAND			0x43
 
-//! Global Tick count
-uint32_t		_pit_ticks=0;
 
-void ( __attribute__ ((__cdecl__)) i86_pit_irq () {
- 
-	//! macro to hide interrupt start code
-	intstart ();
- 
-	//! increment tick count
-	_pit_ticks++;
- 
-	//! tell hal we are done
-	interruptdone(0);
- 
-	//! macro used with intstart to return from interrupt handler
-	intret ();
+// Global Tick count
+uint32_t		_pit_ticks=69;
+
+void i86_pit_start(int hz){
+	int divisor = 1193180 / hz;       /* Calculate our divisor */
+    outb(0x43, 0x36);             /* Set our command byte 0x36 */
+    outb(0x40, divisor & 0xFF);   /* Set low byte of divisor */
+    outb(0x40, divisor >> 8);     /* Set high byte of divisor */
 }
+
+__attribute__((interrupt)) void  i86_pit_irq (struct interrupt_frame *frame) {
+	// increment tick count
+	_pit_ticks++;
+	txt_clearscreen();
+	// tell hal we are done
+	i86_pic_sendEOI(0);
+ }

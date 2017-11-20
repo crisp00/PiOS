@@ -1,23 +1,27 @@
 #include "panic.h"
 #include "../hal/include/idt.h"
 #include "../stdlib/include/txtmode.h"
+#include "../stdlib/include/keyboard.h"
 #include "../stdlib/include/stdio.h"
 
+struct interrupt_frame;
+
 void panic(char *message, char* intnum, bool halt){
+    //intstart();
     txt_setcolor(TXT_COLOR_WHITE, TXT_COLOR_BLACK);
     txt_clearscreen();
     txt_gotoxy(0, 0);
     printf(message);
     printf(" - ");
     printf(intnum);
-    if(halt || true){
-        __asm__("cli\nhlt");
-    }
+    kbd_getchar();
 }
 
-void int_00(void)
+__attribute__((interrupt)) void int_00(struct interrupt_frame* frame)
 {
+    txt_push_screen();
 	panic("Divide By Zero Error","#00", false);
+    txt_pop_screen();
 }
 
 void int_01(void)
@@ -110,6 +114,14 @@ void int_19(void)
 	panic("SIMD Floating-Point","#XF", false);
 }
 
+__attribute__((interrupt)) void int_HI(struct interrupt_frame* frame)
+{
+    txt_push_screen();
+	panic("Hardware Interrupt","#HI", false);
+    txt_pop_screen();
+}
+
+
 void load_interrupts(){
     idt_install_ir(0, I86_INTATTR_DEFAULT, 0x8, int_00);
     idt_install_ir(1, I86_INTATTR_DEFAULT, 0x8, int_01);
@@ -130,4 +142,20 @@ void load_interrupts(){
     idt_install_ir(17, I86_INTATTR_DEFAULT, 0x8, int_17);
     idt_install_ir(18, I86_INTATTR_DEFAULT, 0x8, int_18);
     idt_install_ir(19, I86_INTATTR_DEFAULT, 0x8, int_19);
+    //idt_install_ir(32, I86_INTATTR_DEFAULT, 0x8, int_HI);
+    idt_install_ir(33, I86_INTATTR_DEFAULT, 0x8, int_HI);
+    idt_install_ir(34, I86_INTATTR_DEFAULT, 0x8, int_HI);
+    idt_install_ir(35, I86_INTATTR_DEFAULT, 0x8, int_HI);
+    idt_install_ir(36, I86_INTATTR_DEFAULT, 0x8, int_HI);
+    idt_install_ir(37, I86_INTATTR_DEFAULT, 0x8, int_HI);
+    idt_install_ir(38, I86_INTATTR_DEFAULT, 0x8, int_HI);
+    idt_install_ir(39, I86_INTATTR_DEFAULT, 0x8, int_HI);
+    idt_install_ir(40, I86_INTATTR_DEFAULT, 0x8, int_HI);
+    idt_install_ir(41, I86_INTATTR_DEFAULT, 0x8, int_HI);
+    idt_install_ir(42, I86_INTATTR_DEFAULT, 0x8, int_HI);
+    idt_install_ir(43, I86_INTATTR_DEFAULT, 0x8, int_HI);
+    idt_install_ir(44, I86_INTATTR_DEFAULT, 0x8, int_HI);
+    idt_install_ir(45, I86_INTATTR_DEFAULT, 0x8, int_HI);
+    idt_install_ir(46, I86_INTATTR_DEFAULT, 0x8, int_HI);
+    idt_install_ir(47, I86_INTATTR_DEFAULT, 0x8, int_HI);
 }

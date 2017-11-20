@@ -20,4 +20,4 @@ kernel/build/physmmngr.o:	$(curdir)/physmmngr.c
 
 
 kernel/build/panic.o:	$(curdir)/panic.c
-	i686-elf-gcc -c -xc $(curdir)/panic.c -o $(builddir)/panic.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+	i686-elf-gcc -c -xc $(curdir)/panic.c -o $(builddir)/panic.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -mgeneral-regs-only -mno-red-zone
