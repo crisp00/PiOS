@@ -30,3 +30,27 @@ _idt_load:
     ret
 
 bootinfo: dd 32
+
+extern cinthandle
+%macro INTWRAP 1
+    xchg bx, bx
+    pushad
+    cld
+    push %1
+    call cinthandle
+    popad
+    xchg bx, bx
+    iret
+%endmacro
+global INT1
+global INT2
+INT1: INTWRAP 1
+INT2: INTWRAP 2
+INTWRAP 3
+INTWRAP 4
+INTWRAP 5
+INTWRAP 6
+INTWRAP 7
+INTWRAP 8
+INTWRAP 9
+INTWRAP 10

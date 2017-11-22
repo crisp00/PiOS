@@ -25,6 +25,6 @@ void hal_init(){
     i86_pic_initialize(32, 40);
     printf("OK\n");
     //idt_install_ir(32, I86_INTATTR_DEFAULT, 0x8, i86_pit_irq);
-    i86_pit_start(100);
+    //i86_pit_start(100);
 }
 

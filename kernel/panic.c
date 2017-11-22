@@ -51,7 +51,9 @@ void int_05(void)
 
 void int_06(void)
 {
+    txt_push_screen();
 	panic("Invalid Opcode","#UD", false);
+    txt_pop_screen();
 }
 
 void int_07(void)
@@ -121,10 +123,11 @@ __attribute__((interrupt)) void int_HI(struct interrupt_frame* frame)
     txt_pop_screen();
 }
 
+extern physical_addr INT1;
 
 void load_interrupts(){
     idt_install_ir(0, I86_INTATTR_DEFAULT, 0x8, int_00);
-    idt_install_ir(1, I86_INTATTR_DEFAULT, 0x8, int_01);
+    idt_install_ir(1, I86_INTATTR_DEFAULT, 0x8, *((I86_IRQ_HANDLER)&INT1));
     idt_install_ir(2, I86_INTATTR_DEFAULT, 0x8, int_02);
     idt_install_ir(3, I86_INTATTR_DEFAULT, 0x8, int_03);
     idt_install_ir(4, I86_INTATTR_DEFAULT, 0x8, int_04);

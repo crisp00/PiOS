@@ -63,6 +63,8 @@ void pios_cool_shit(){
 
 struct multiboot_info bi;
 
+extern physical_addr *INT1;
+
 #if defined(__cplusplus)
 extern "C" /* Use C linkage for kernel_main. */
 #endif
@@ -85,9 +87,12 @@ void krnl_main(struct multiboot_info *bootinfo){
     printf("Loading Interrupt Handlers...");
     load_interrupts();
     printf("OK\n");
-
-    __asm__ ("sti"); 
-
+    printf(itoa(&INT1, 16, tmp));
+    asm("int $1");
+    asm("cli; hlt");
+    //__asm__ ("sti"); 
+    printf("Done");
+    asm("cli; hlt");
     printf("Preparing memory map...");
     printf(itoa(bi.m_mmap_length, 10, tmp));
     printf(" entries...");
@@ -103,4 +108,10 @@ void krnl_main(struct multiboot_info *bootinfo){
     printf("\nhalting");
     __asm__("hlt");
     return;
+}
+
+void cinthandle(int* intnum){
+    txt_clearscreen();
+    printf("New interrupt called: ");
+    printf(itoa(intnum, 16, tmp));
 }
