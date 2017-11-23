@@ -16,7 +16,7 @@ __attribute__((interrupt)) void  __attribute__ ((__cdecl__)) default_int_handler
     kbd_getchar();
     txt_pop_screen();
 }
-
+extern testInt;
 void hal_init(){
     printf("Initializing Interrupt Descriptor Table...");
     idt_init((I86_IRQ_HANDLER)default_int_handler);
@@ -24,7 +24,8 @@ void hal_init(){
     printf("Initializing Programmable Interrupt Controller...");
     i86_pic_initialize(32, 40);
     printf("OK\n");
-    //idt_install_ir(32, I86_INTATTR_DEFAULT, 0x8, i86_pit_irq);
-    //i86_pit_start(100);
+    set_int_handler(32, i86_pit_irq);
+    set_int_handler(5, testInt);
+    i86_pit_start(100);
 }
 

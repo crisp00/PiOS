@@ -123,50 +123,12 @@ __attribute__((interrupt)) void int_HI(struct interrupt_frame* frame)
     txt_pop_screen();
 }
 
-extern physical_addr INT1;
-extern physical_addr INT2;
+extern char INT0;
 extern uint32_t INTSize;
 char *tmp;
 void load_interrupts(){
-    printf("\n\nGotem:         ");
-    printf(itoa(&INT1, 10, tmp));
-    printf("\nGotem:         ");
-    printf(itoa(&INT2, 10, tmp));
-    printf("\n2 - 1:         ");
-    printf(itoa(INTSize, 10, tmp));
-    idt_install_ir(0, I86_INTATTR_DEFAULT, 0x8, int_00);
-    idt_install_ir(1, I86_INTATTR_DEFAULT, 0x8, *((I86_IRQ_HANDLER)&INT1));
-    idt_install_ir(2, I86_INTATTR_DEFAULT, 0x8, *((I86_IRQ_HANDLER)&INT2));
-    idt_install_ir(3, I86_INTATTR_DEFAULT, 0x8, *((I86_IRQ_HANDLER)(&INT1 + INTSize)));
-    idt_install_ir(4, I86_INTATTR_DEFAULT, 0x8, int_04);
-    idt_install_ir(5, I86_INTATTR_DEFAULT, 0x8, int_05);
-    idt_install_ir(6, I86_INTATTR_DEFAULT, 0x8, int_06);
-    idt_install_ir(7, I86_INTATTR_DEFAULT, 0x8, int_07);
-    idt_install_ir(8, I86_INTATTR_DEFAULT, 0x8, int_08);
-    idt_install_ir(9, I86_INTATTR_DEFAULT, 0x8, int_09);
-    idt_install_ir(10, I86_INTATTR_DEFAULT, 0x8, int_10);
-    idt_install_ir(11, I86_INTATTR_DEFAULT, 0x8, int_11);
-    idt_install_ir(12, I86_INTATTR_DEFAULT, 0x8, int_12);
-    idt_install_ir(13, I86_INTATTR_DEFAULT, 0x8, int_13);
-    idt_install_ir(14, I86_INTATTR_DEFAULT, 0x8, int_14);
-    idt_install_ir(16, I86_INTATTR_DEFAULT, 0x8, int_16);
-    idt_install_ir(17, I86_INTATTR_DEFAULT, 0x8, int_17);
-    idt_install_ir(18, I86_INTATTR_DEFAULT, 0x8, int_18);
-    idt_install_ir(19, I86_INTATTR_DEFAULT, 0x8, int_19);
-    //idt_install_ir(32, I86_INTATTR_DEFAULT, 0x8, int_HI);
-    idt_install_ir(33, I86_INTATTR_DEFAULT, 0x8, int_HI);
-    idt_install_ir(34, I86_INTATTR_DEFAULT, 0x8, int_HI);
-    idt_install_ir(35, I86_INTATTR_DEFAULT, 0x8, int_HI);
-    idt_install_ir(36, I86_INTATTR_DEFAULT, 0x8, int_HI);
-    idt_install_ir(37, I86_INTATTR_DEFAULT, 0x8, int_HI);
-    idt_install_ir(38, I86_INTATTR_DEFAULT, 0x8, int_HI);
-    idt_install_ir(39, I86_INTATTR_DEFAULT, 0x8, int_HI);
-    idt_install_ir(40, I86_INTATTR_DEFAULT, 0x8, int_HI);
-    idt_install_ir(41, I86_INTATTR_DEFAULT, 0x8, int_HI);
-    idt_install_ir(42, I86_INTATTR_DEFAULT, 0x8, int_HI);
-    idt_install_ir(43, I86_INTATTR_DEFAULT, 0x8, int_HI);
-    idt_install_ir(44, I86_INTATTR_DEFAULT, 0x8, int_HI);
-    idt_install_ir(45, I86_INTATTR_DEFAULT, 0x8, int_HI);
-    idt_install_ir(46, I86_INTATTR_DEFAULT, 0x8, int_HI);
-    idt_install_ir(47, I86_INTATTR_DEFAULT, 0x8, int_HI);
+    idt_install_ir(0, I86_INTATTR_DEFAULT, 0x8, *((I86_IRQ_HANDLER)&INT0));
+    for(int i = 1; i < 256; i++){
+        idt_install_ir(i, I86_INTATTR_DEFAULT, 0x8, *((I86_IRQ_HANDLER)(&INT0 + INTSize * i)));
+    }
 }

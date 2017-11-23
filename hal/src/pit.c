@@ -19,10 +19,9 @@ void i86_pit_start(int hz){
     outb(0x40, divisor >> 8);     /* Set high byte of divisor */
 }
 
-__attribute__((interrupt)) void  i86_pit_irq (struct interrupt_frame *frame) {
+void  i86_pit_irq () {
 	// increment tick count
 	_pit_ticks++;
+	return;
 	txt_clearscreen();
-	// tell hal we are done
-	i86_pic_sendEOI(0);
  }

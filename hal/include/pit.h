@@ -25,5 +25,5 @@
 uint32_t _pit_ticks;
 struct interrupt_frame;
 
-__attribute__((interrupt)) void  i86_pit_irq (struct interrupt_frame *frame);
+void  i86_pit_irq ();
 void i86_pit_start(int hz);
