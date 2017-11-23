@@ -70,8 +70,8 @@ extern "C" /* Use C linkage for kernel_main. */
 #endif
 void krnl_main(struct multiboot_info *bootinfo){
     bi = *bootinfo;
-    mmap_entry_t *mmap;  
-    mmap_entry_t *current_entry;  
+    mmap_entry_t *mmap;
+    mmap_entry_t *current_entry;
     txt_setcolor(TXT_COLOR_CYAN, TXT_COLOR_WHITE);
     txt_clearscreen();
     txt_gotoxy(0, 0);
@@ -86,13 +86,12 @@ void krnl_main(struct multiboot_info *bootinfo){
 
     printf("Loading Interrupt Handlers...");
     load_interrupts();
+    // asm("cli; hlt");
     printf("OK\n");
     printf(itoa(&INT1, 16, tmp));
-    asm("int $1");
-    asm("cli; hlt");
-    //__asm__ ("sti"); 
+    asm("int $3");
+    //__asm__ ("sti");
     printf("Done");
-    asm("cli; hlt");
     printf("Preparing memory map...");
     printf(itoa(bi.m_mmap_length, 10, tmp));
     printf(" entries...");
@@ -110,8 +109,11 @@ void krnl_main(struct multiboot_info *bootinfo){
     return;
 }
 
-void cinthandle(int* intnum){
+void CINTHandle(unsigned char intnum, unsigned char intnm){
+    txt_push_screen();
     txt_clearscreen();
     printf("New interrupt called: ");
     printf(itoa(intnum, 16, tmp));
+    kbd_getscancode();
+    txt_pop_screen();
 }

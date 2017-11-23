@@ -16,7 +16,12 @@ pop dword eax
 mov esp, stack_top
 mov dword [bootinfo], dword eax
 push dword [bootinfo]
+mov dword [INTSize], INT2
+sub dword [INTSize], INT1
 call krnl_main
+cli
+hlt
+
 
 _idtr:
     dw 2047
@@ -31,26 +36,26 @@ _idt_load:
 
 bootinfo: dd 32
 
-extern cinthandle
+extern CINTHandle
 %macro INTWRAP 1
     xchg bx, bx
-    pushad
+    pusha
     cld
     push %1
-    call cinthandle
-    popad
+    call CINTHandle
     xchg bx, bx
+    add esp, 4
+    xchg bx, bx
+    popa
     iret
 %endmacro
 global INT1
 global INT2
+global INTSize
+INTSize dd 0
 INT1: INTWRAP 1
 INT2: INTWRAP 2
 INTWRAP 3
 INTWRAP 4
 INTWRAP 5
 INTWRAP 6
-INTWRAP 7
-INTWRAP 8
-INTWRAP 9
-INTWRAP 10

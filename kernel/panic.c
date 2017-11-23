@@ -124,12 +124,20 @@ __attribute__((interrupt)) void int_HI(struct interrupt_frame* frame)
 }
 
 extern physical_addr INT1;
-
+extern physical_addr INT2;
+extern uint32_t INTSize;
+char *tmp;
 void load_interrupts(){
+    printf("\n\nGotem:         ");
+    printf(itoa(&INT1, 10, tmp));
+    printf("\nGotem:         ");
+    printf(itoa(&INT2, 10, tmp));
+    printf("\n2 - 1:         ");
+    printf(itoa(INTSize, 10, tmp));
     idt_install_ir(0, I86_INTATTR_DEFAULT, 0x8, int_00);
     idt_install_ir(1, I86_INTATTR_DEFAULT, 0x8, *((I86_IRQ_HANDLER)&INT1));
-    idt_install_ir(2, I86_INTATTR_DEFAULT, 0x8, int_02);
-    idt_install_ir(3, I86_INTATTR_DEFAULT, 0x8, int_03);
+    idt_install_ir(2, I86_INTATTR_DEFAULT, 0x8, *((I86_IRQ_HANDLER)&INT2));
+    idt_install_ir(3, I86_INTATTR_DEFAULT, 0x8, *((I86_IRQ_HANDLER)(&INT1 + INTSize)));
     idt_install_ir(4, I86_INTATTR_DEFAULT, 0x8, int_04);
     idt_install_ir(5, I86_INTATTR_DEFAULT, 0x8, int_05);
     idt_install_ir(6, I86_INTATTR_DEFAULT, 0x8, int_06);
