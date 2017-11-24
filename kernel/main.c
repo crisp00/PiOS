@@ -90,7 +90,6 @@ void krnl_main(struct multiboot_info *bootinfo){
 
     // asm("cli; hlt");
     printf("OK\n");
-        asm("cli; hlt");
 
     __asm__ ("sti");
     printf("Done");

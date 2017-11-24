@@ -52,9 +52,12 @@ int idt_init(I86_IRQ_HANDLER default_handler){
 }
 
 
-    char *tmp;
+char *tmp;
 void CINTHandle(unsigned char intnum){
-    call_int_handler_ifset(intnum);
+    //call_int_handler_ifset(intnum);
+    printf("Interrupt handler, N: ");
+    printf(itoa(intnum, 16, tmp));
+    printf("\n");
     if(intnum > 31 && intnum < 48){
         i86_pic_sendEOI();
     }
@@ -84,6 +87,7 @@ void call_int_handler_ifset(uint8_t index){
     }
 }
 
-void testInt(){
+void testInt(void){
+    asm("cli; hlt");
     printf("\ntestint working!\n");
 }

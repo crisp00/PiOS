@@ -46,7 +46,7 @@ istruc multiboot_info
 iend
 
     ; Adjust segment registers
-    main:    
+    main:
         ; prepare segments and stack
         cli
         xor ax, ax
@@ -88,12 +88,12 @@ iend
         mov bp, KERNEL_RMODE_BASE
         mov si, KERNEL_NAME
         call LoadFile
-        mov DWORD [ImageSize], ecx 
+        mov DWORD [ImageSize], ecx
         cmp ax, 0
         je StartKernel
         mov ah, 0
         int 0x16                                                        ; wait for keypress
-        int 0x19   
+        int 0x19
         cli
         hlt
 
@@ -108,7 +108,7 @@ iend
         or eax, 1
         mov cr0, eax
         jmp CODE_DESC:next
-        
+
         bits 32
         next:
 
@@ -116,6 +116,8 @@ iend
         mov ds, ax
         mov ss, ax
         mov es, ax
+        mov fs, ax
+        mov gs, ax
         mov esp, 90000h
 
         ; Loading Message
@@ -140,7 +142,7 @@ iend
         mov ebx, dword boot_info
 
         jmp CODE_DESC:KERNEL_PMODE_BASE
-       
+
 
 
     stop:

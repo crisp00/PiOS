@@ -38,14 +38,25 @@ bootinfo: dd 32
 
 extern CINTHandle
 %macro INTWRAP 1
-    xchg bx, bx
     pusha
+    push ds
+    push ss
+    push es
+    push fs
+    push gs
+
+    xchg bx, bx
     cld
     push %1
     call CINTHandle
     xchg bx, bx
     add esp, 4
     xchg bx, bx
+    pop gs
+    pop fs
+    pop es
+    pop ss
+    pop ds
     popa
     iret
 %endmacro
@@ -53,6 +64,8 @@ global INT0
 global INT1
 global INTSize
 INTSize dd 0
+ESPSave dd 0
+
 
 INT0: INTWRAP 0
 INT1: INTWRAP 1

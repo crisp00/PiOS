@@ -24,8 +24,7 @@ void hal_init(){
     printf("Initializing Programmable Interrupt Controller...");
     i86_pic_initialize(32, 40);
     printf("OK\n");
-    set_int_handler(32, i86_pit_irq);
+    //set_int_handler(32, i86_pit_irq);
     set_int_handler(5, testInt);
     i86_pit_start(100);
 }
-
