@@ -10,7 +10,7 @@
 
 
 // Global Tick count
-uint32_t		_pit_ticks=69;
+uint32_t		_pit_ticks=0;
 
 void i86_pit_start(int hz){
 	int divisor = 1193180 / hz;       /* Calculate our divisor */

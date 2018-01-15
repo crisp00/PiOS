@@ -46,7 +46,7 @@ struct multiboot_info {
 };
 
 extern void* krnlend;
-
+extern struct multiboot_info *bootinfo;
 
 char* tmp;
 
@@ -66,8 +66,8 @@ struct multiboot_info bi;
 #if defined(__cplusplus)
 extern "C" /* Use C linkage for kernel_main. */
 #endif
-void krnl_main(struct multiboot_info *bootinfo){
-    bi = *bootinfo;
+void krnl_main(struct multiboot_info *boot_info){
+    bi = *boot_info;
     mmap_entry_t *mmap;
     mmap_entry_t *current_entry;
     txt_setcolor(TXT_COLOR_CYAN, TXT_COLOR_WHITE);
@@ -94,16 +94,20 @@ void krnl_main(struct multiboot_info *bootinfo){
     __asm__ ("sti");
     printf("Done");
     printf("Preparing memory map...");
-    printf(itoa(bi.m_mmap_length, 10, tmp));
+    printf(itoa(bootinfo->m_mmap_length, 10, tmp));
     printf(" entries...");
     mmap = (mmap_entry_t*) (bootinfo->m_mmap_addr);
-    pmmngr_init(bootinfo->m_memoryHi * 64 + bootinfo->m_memoryLo + 1024, (physical_addr)&krnlend + 4096);
-    printf("OK\n");
-    //pmmngr_load_biosmmap(mmap, bootinfo->m_mmap_length);
-
+    pmmngr_init(bootinfo->m_memoryHi * 64 + bootinfo->m_memoryLo + 1024, (physical_addr*)krnlend + 4096);
+    // printf("OK\n");
+    // pmmngr_load_biosmmap(mmap, bootinfo->m_mmap_length);
+    int last_time;
     while(1){
-        txt_gotoxy(38, 12);
-        printf(itoa(_pit_ticks, 10, tmp));
+        printf(itoa(_pit_ticks / 100, 10, tmp));
+        printf("\n");
+        last_time = _pit_ticks;
+        while(_pit_ticks - last_time < 100){
+          __asm__("nop");
+        }
     }
     printf("\nhalting");
     __asm__("hlt");

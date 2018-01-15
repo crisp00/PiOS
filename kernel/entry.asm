@@ -1,21 +1,18 @@
 extern krnl_main
-SECTION .st
-SECTION .bss align=16
-stack_bottom:
-    resb 16384
-stack_top:
-
-global _idt
-_idt:
-resb 2048
 
 SECTION .text
 global _start
 _start:
 pop dword eax
-mov esp, stack_top
 mov dword [bootinfo], dword eax
 push dword [bootinfo]
+mov esp, stack_top
+mov eax, 0x10
+mov ds, eax
+mov es, eax
+mov fs, eax
+mov gs, eax
+mov ss, eax
 mov dword [INTSize], INT1
 sub dword [INTSize], INT0
 call krnl_main
@@ -31,41 +28,54 @@ global _idt_load
 global _sidt
 extern idtr
 _idt_load:
-    lidt [_idtr]
+    lidt [idtr]
     ret
 
+global bootinfo
 bootinfo: dd 32
 
 extern CINTHandle
+extern printf
 %macro INTWRAP 1
     pusha
+    xchg bx, bx
     push ds
-    push ss
     push es
     push fs
     push gs
+    mov ax, 10h
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
+    mov eax, esp
+    push eax
 
-    xchg bx, bx
-    cld
-    push %1
-    call CINTHandle
-    xchg bx, bx
+    push DWORD %1
+    mov eax, CINTHandle
+    call eax
     add esp, 4
-    xchg bx, bx
+    ; push DWORD intDoneMsg
+    ; mov eax, printf
+    ; call eax
+    ; add esp, 4
+
+    pop eax
+    ; mov esp, eax
     pop gs
     pop fs
     pop es
-    pop ss
     pop ds
     popa
-    iret
+    xchg bx, bx
+    iretd
 %endmacro
 global INT0
 global INT1
 global INTSize
 INTSize dd 0
 ESPSave dd 0
-
+intDoneMsg db "INTDONE", 10, 00
 
 INT0: INTWRAP 0
 INT1: INTWRAP 1
@@ -303,3 +313,13 @@ INTWRAP 252
 INTWRAP 253
 INTWRAP 254
 INTWRAP 255
+
+
+SECTION .bss align=16
+stack_bottom:
+    resb 16384
+stack_top:
+
+global _idt
+_idt:
+resb 2048
