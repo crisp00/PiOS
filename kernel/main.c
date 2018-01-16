@@ -6,7 +6,8 @@
 #include "../stdlib/include/stdio.h"
 #include "../stdlib/include/txtmode.h"
 #include "../stdlib/include/keyboard.h"
-#include "./physmmngr.h"
+#include "./pmem.h"
+#include "./vmem.h"
 #include "../hal/include/hal.h"
 #include "../hal/include/pit.h"
 #include "./panic.h"
@@ -97,9 +98,19 @@ void krnl_main(struct multiboot_info *boot_info){
     printf(itoa(bootinfo->m_mmap_length, 10, tmp));
     printf(" entries...");
     mmap = (mmap_entry_t*) (bootinfo->m_mmap_addr);
-    pmmngr_init(bootinfo->m_memoryHi * 64 + bootinfo->m_memoryLo + 1024, (physical_addr*)krnlend + 4096);
-    // printf("OK\n");
-    // pmmngr_load_biosmmap(mmap, bootinfo->m_mmap_length);
+    pmem_init(bootinfo->m_memoryHi * 64 + bootinfo->m_memoryLo + 1024, (physical_addr*)krnlend + 4096);
+    pmem_load_biosmmap(mmap, bootinfo->m_mmap_length);
+
+    char *test = (char *)pmem_alloc_block();
+    printf(itoa((int)test, 16, tmp));
+    int index = pmem_map_index((uint64_t)test);
+    pmem_block_fill('P', index);
+
+    vmem_init();
+
+    int *asd = 0x4000000;
+    asd = 69;
+
     int last_time;
     while(1){
         printf(itoa(_pit_ticks / 100, 10, tmp));

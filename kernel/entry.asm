@@ -34,6 +34,19 @@ _idt_load:
 global bootinfo
 bootinfo: dd 32
 
+global vmem_enable
+extern vmem_page_directory
+vmem_enable:
+    pop eax
+    mov cr3, eax
+    push eax
+
+    mov eax, cr0
+    or eax, 0x80000001
+    mov eax, cr0
+    ret
+
+
 extern CINTHandle
 extern printf
 %macro INTWRAP 1
