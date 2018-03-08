@@ -60,9 +60,19 @@ void pios_cool_shit(){
     printf( "|| #####      #    #   ####  ||\n");
     printf( "|| #       #  #    #       # || \n");
     printf( "|| #       #   ####    ####  || \n");
-    printf( "++---------------------------++\n");}
+    printf( "++---------------------------++\n");
+}
 
 struct multiboot_info bi;
+
+
+#if defined(__cplusplus)
+extern "C" /* Use C linkage for kernel_main. */
+#endif
+void krnl_test(){
+    uint16_t* vidmem = (uint16_t*) 0xB8000;
+    vidmem[3] = 0xF044;
+}
 
 #if defined(__cplusplus)
 extern "C" /* Use C linkage for kernel_main. */
@@ -75,24 +85,18 @@ void krnl_main(struct multiboot_info *boot_info){
     txt_clearscreen();
     txt_gotoxy(0, 0);
     pios_cool_shit();
-    txt_setcolor(TXT_COLOR_CYAN, TXT_COLOR_WHITE);
-
-
 
     hal_init();
-
-
 
     printf("Loading Interrupt Handlers...");
     load_interrupts();
 
-    asm("int $5");
 
 
     // asm("cli; hlt");
     printf("OK\n");
 
-    __asm__ ("sti");
+    //asm("sti");
     printf("Done");
     printf("Preparing memory map...");
     printf(itoa(bootinfo->m_mmap_length, 10, tmp));
@@ -107,16 +111,12 @@ void krnl_main(struct multiboot_info *boot_info){
     pmem_block_fill('P', index);
 
     vmem_init();
-
-    int *asd = 0x4000000;
-    asd = 69;
-
     int last_time;
     while(1){
         printf(itoa(_pit_ticks / 100, 10, tmp));
         printf("\n");
         last_time = _pit_ticks;
-        while(_pit_ticks - last_time < 100){
+        while(_pit_ticks - last_time < 10000){
           __asm__("nop");
         }
     }

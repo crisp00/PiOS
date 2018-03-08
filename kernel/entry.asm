@@ -1,11 +1,37 @@
+
 extern krnl_main
 
+section .multiboot_header
+header_start:
+    dd 0xe85250d6                ; magic number (multiboot 2)
+    dd 0                         ; architecture 0 (protected mode i386)
+    dd header_end - header_start ; header length
+    ; checksum
+    dd 0x100000000 - (0xe85250d6 + 0 + (header_end - header_start))
+
+    ; insert optional multiboot tags here
+
+    ; required end tag
+    dw 0    ; type
+    dw 0    ; flags
+    dd 8    ; size
+header_end:
+
+
 SECTION .text
-global _start
-_start:
+global start
+extern krnl_main    
+start:
 pop dword eax
-mov dword [bootinfo], dword eax
-push dword [bootinfo]
+; mov dword [bootinfo], dword eax
+; push dword [bootinfo]
+
+mov word [0xB8000], 0xF041
+
+call installGDT;
+
+mov word [0xB8002], 0xF042
+
 mov esp, stack_top
 mov eax, 0x10
 mov ds, eax
@@ -13,20 +39,28 @@ mov es, eax
 mov fs, eax
 mov gs, eax
 mov ss, eax
-mov dword [INTSize], INT1
-sub dword [INTSize], INT0
+
+mov word [0xB8004], 0xF043
+
+
 call krnl_main
+
+mov word [0xB8120], 0x3F41
+
 cli
 hlt
 
 
-_idtr:
+
+%include "./kernel/gdt.inc"
+
+global idtr
+idtr:
     dw 2047
     dd _idt
 
 global _idt_load
 global _sidt
-extern idtr
 _idt_load:
     lidt [idtr]
     ret
@@ -49,6 +83,7 @@ vmem_enable:
 extern CINTHandle
 extern printf
 %macro INTWRAP 1
+    hlt
     pusha
     xchg bx, bx
     push ds
@@ -65,9 +100,10 @@ extern printf
 
     push DWORD 0
     push DWORD %1
+    hlt
     mov eax, CINTHandle
     call eax
-    add esp, 4
+    add esp, 8
     ; push DWORD intDoneMsg
     ; mov eax, printf
     ; call eax
@@ -85,6 +121,7 @@ extern printf
 %endmacro
 
 %macro INTWRAP_ERR 1
+    pop errnum
     pusha
     xchg bx, bx
     push ds
@@ -99,7 +136,7 @@ extern printf
     mov eax, esp
     push eax
 
-    push DWORD 0
+    push DWORD errnum
     push DWORD %1
     mov eax, CINTHandle
     call eax
@@ -120,7 +157,11 @@ extern printf
     iretd
 %endmacro
 
+errnum dd 0
+
 global INTSize
+
+
 global INT0
 global INT1
 global INT2
@@ -182,6 +223,16 @@ global INT57
 global INT58
 global INT59
 global INT60
+global INT61
+global INT62
+global INT63
+global INT64
+global INT65
+global INT66
+global INT67
+global INT68
+global INT69
+global INT70
 global INT71
 global INT72
 global INT73
@@ -272,6 +323,16 @@ global INT157
 global INT158
 global INT159
 global INT160
+global INT161
+global INT162
+global INT163
+global INT164
+global INT165
+global INT166
+global INT167
+global INT168
+global INT169
+global INT170
 global INT171
 global INT172
 global INT173
@@ -357,9 +418,12 @@ global INT252
 global INT253
 global INT254
 global INT255
+
 INTSize dd 0
 ESPSave dd 0
 intDoneMsg db "INTDONE", 10, 00
+
+
 
 INT0: INTWRAP 0
 INT1: INTWRAP 1
@@ -422,6 +486,16 @@ INT57: INTWRAP 57
 INT58: INTWRAP 58
 INT59: INTWRAP 59
 INT60: INTWRAP 60
+INT61: INTWRAP 61
+INT62: INTWRAP 62
+INT63: INTWRAP 63
+INT64: INTWRAP 64
+INT65: INTWRAP 65
+INT66: INTWRAP 66
+INT67: INTWRAP 67
+INT68: INTWRAP 68
+INT69: INTWRAP 69
+INT70: INTWRAP 70
 INT71: INTWRAP 71
 INT72: INTWRAP 72
 INT73: INTWRAP 73
@@ -512,6 +586,16 @@ INT157: INTWRAP 157
 INT158: INTWRAP 158
 INT159: INTWRAP 159
 INT160: INTWRAP 160
+INT161: INTWRAP 161
+INT162: INTWRAP 162
+INT163: INTWRAP 163
+INT164: INTWRAP 164
+INT165: INTWRAP 165
+INT166: INTWRAP 166
+INT167: INTWRAP 167
+INT168: INTWRAP 168
+INT169: INTWRAP 169
+INT170: INTWRAP 170
 INT171: INTWRAP 171
 INT172: INTWRAP 172
 INT173: INTWRAP 173

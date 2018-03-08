@@ -60,7 +60,7 @@ typedef struct IntHandler{
 } IntHandler_t;
 
 IDTDescr_t idt_desc_table[256];
-IDTRReg idtr;
+extern IDTRReg idtr;
 
 //Internal Interrupt handlers
 IntHandler_t intHandlers[256];
@@ -103,8 +103,8 @@ void keyboard_handler()
     }
 }
 
-int idt_install_ir(int n, uint8_t type, uint16_t gdt_selector, I86_IRQ_HANDLER ir){
-    physical_addr addr = (physical_addr)ir;
+int idt_install_ir(int n, uint8_t type, uint16_t gdt_selector, void *ir){
+    uint32_t addr = (uint32_t)ir;
     idt_desc_table[n].base_low = (uint16_t)addr & 0xffff;
     idt_desc_table[n].base_high = (uint16_t)(addr >> 16) & 0xffff;
     idt_desc_table[n].reserved = 0;
@@ -138,7 +138,7 @@ int idt_init(I86_IRQ_HANDLER default_handler){
 char *tmp;
 extern _pit_ticks;
 extern KBD_SCANCODES[];
-void CINTHandle(unsigned char intnum){
+void CINTHandle(unsigned char intnum, unsigned char error_code){
     //call_int_handler_ifset(intnum);
     if(intnum == 32){
       _pit_ticks++;

@@ -5,10 +5,10 @@ kernel/build/KRNL.SYS: curdir = kernel
 kernel/build/KRNL.SYS: builddir = kernel/build
 
 kernel/build/KRNL.SYS: kernel/build/entry.o  kernel/build/kernel.o stdlib/lib/libpi.a kernel/build/pmem.o kernel/build/vmem.o kernel/build/panic.o hal/lib/libpihal.a
-	i686-elf-gcc -T $(curdir)/linker.ld -o $(builddir)/KRNL.SYS -ffreestanding -mno-red-zone -O2 -nostdlib $(builddir)/entry.o $(builddir)/kernel.o $(builddir)/panic.o kernel/build/pmem.o kernel/build/vmem.o -lgcc -static-libgcc -lpi -lpihal -L stdlib/lib/ -L hal/lib/
+	i686-elf-gcc -T $(curdir)/linker.ld -n -o $(builddir)/KRNL.SYS -ffreestanding -mno-red-zone -O2 -nostdlib $(builddir)/entry.o $(builddir)/kernel.o $(builddir)/panic.o kernel/build/pmem.o kernel/build/vmem.o -mcmodel=medium -lgcc -static-libgcc -lpi -lpihal -L stdlib/lib/ -L hal/lib/
 
 
-kernel/build/entry.o:	$(curdir)/entry.asm
+kernel/build/entry.o:	$(curdir)/entry.asm $(curdir)/gdt.inc
 	nasm -f elf $(curdir)/entry.asm -o kernel/build/entry.o
 
 kernel/build/kernel.o:	$(curdir)/main.c

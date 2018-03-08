@@ -26,5 +26,5 @@ void vmem_init(){
   }
   printf("\nasd: ");
   printf(itoa((int)vmem_page_directory, 16, tmp));
-  vmem_enable((uint32_t)vmem_page_directory);
+  //vmem_enable((uint32_t)vmem_page_directory);
 }

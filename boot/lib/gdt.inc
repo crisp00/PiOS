@@ -1,7 +1,7 @@
 %ifndef __GDT_INC_LIAUSHL9A8D69F87_INCLUDED__
 %define __GDT_INC_LIAUSHL9A8D69F87_INCLUDED__
 
-bits	16
+bits 16
 
 installGDT:
 
