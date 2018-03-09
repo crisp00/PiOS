@@ -17,12 +17,13 @@ SECTIONS
   }
   .bss : {
     *(.bss)
+    *(.stack)
     . = ALIGN(4096);
   }
   .extra : {
-      *(.idt)
-      *(.gdt)
-      . = ALIGN(4096);
+    *(.idt)
+    *(.gdt)
+    . = ALIGN(4096);
   }
   krnlend = .;
 }

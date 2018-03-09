@@ -50,8 +50,9 @@ build/kernel/kernel.o: source/kernel/kernel.cc
 build/kernel/libpikrnl.a: 	build/kernel/lib/*.o
 	ar rcs $@ $^
 
-build/kernel/libpihal.a: 	build/kernel/hal/*.o
+build/kernel/libpihal.a: 	build/kernel/hal/*.o build/kernel/hal/pic.o build/kernel/hal/hwio.o
 	ar rcs $@ $^
+
 
 build/kernel/lib/%.o: source/kernel/lib/%.cc
 	$(CXX) -c -xc++ $(CXXFLAGS) $< -o $@ 

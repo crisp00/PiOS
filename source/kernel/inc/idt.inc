@@ -22,11 +22,7 @@ section .idt
 
 extern CINTHandle
 %macro INTWRAP 1
-    mov byte [0xB8002], 0x41
-    cli
-    hlt
     pusha
-    xchg bx, bx
     push ds
     push es
     push fs
@@ -41,7 +37,6 @@ extern CINTHandle
 
     push DWORD 0
     push DWORD %1
-    hlt
     mov eax, CINTHandle
     call eax
     add esp, 8
@@ -57,14 +52,12 @@ extern CINTHandle
     pop es
     pop ds
     popa
-    xchg bx, bx
     iretd
 %endmacro
 
 %macro INTWRAP_ERR 1
     pop errnum
     pusha
-    xchg bx, bx
     push ds
     push es
     push fs

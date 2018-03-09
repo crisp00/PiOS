@@ -22,12 +22,19 @@ int TxtConsole::getIndexFromCoordinates(int x, int y){
 }
 
 void TxtConsole::putChar(char c){
-    this->videoMemory[this->getIndexFromCoordinates(cursor.x, cursor.y)] = TxtChar(c, this->attribute).getValue();
-    if(this->cursor.x < this->width){
-        this->cursor.x++;
+    if(c == '\n'){
+        this->moveCursor(0, this->cursor.y + 1);
     }else{
-        this->cursor.x = 0;
-        this->cursor.y++;
+        this->videoMemory[this->getIndexFromCoordinates(cursor.x, cursor.y)] = TxtChar(c, this->attribute).getValue();
+        if (this->cursor.x < this->width)
+        {
+            this->cursor.x++;
+        }
+        else
+        {
+            this->cursor.x = 0;
+            this->cursor.y++;
+        }
     }
 }
 
