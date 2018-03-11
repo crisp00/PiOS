@@ -96,16 +96,17 @@ void *pmm::mem_alloc(int size){
     //There is a block, is there enough space inside it?
     int in_current = block_byte_get_contiguous(current_block, size);
 
-    log("PMM-> Block map:\n");
-    for(int i_ = 0; i_ < 10; i_++){
-        log(itoa(current_block->map.map[i_], tmp, 2));
-        log("\n");
-    }
-    log("PMM-> end block map\n");
+    // log("PMM-> Block map:\n");
+    // for(int i_ = 0; i_ < BLOCK_MAP_LENGTH; i_++){
+    //     log(itoa(current_block->map.map[i_], tmp, 2));
+    //     log("\n");
+    // }
+    // log("PMM-> end block map\n");
     if(in_current == BLOCK_NO_SPACE){
-        log("PMM-> no space in current block\n");
+        log("PMM-> no space in current block, other blocks in this chain?\n");
         //There is no space in this block, are there other blocks in the chain?
         if(current_block->header.next_block != current_block){
+            log("PMM-> yes, checking all blocks in chain\n");
             //There are other blocks in the chain, check them all
             block_t *last_block = current_block;
             block_t *check_block = current_block->header.next_block;
@@ -117,17 +118,20 @@ void *pmm::mem_alloc(int size){
                     check_block->header.prev_block = last_block;
                     int found_index = block_byte_get_contiguous(check_block, size);
                     if(found_index != BLOCK_NO_SPACE){
+                        log("PMM-> found a block in the chain \n");
                         //Yes! This block has enough space! reserve it and return it!
                         //Also set the current_block to this block, so next time it's faster
                         current_block = check_block;
                         block_byte_set_state_multiple(check_block, found_index, size, true);
                         return (void *)&(check_block->space[found_index]);
                     }else{
+                        log("PMM-> not this one, checking next \n");
                         //No space in the block, try the next one!
                         last_block = check_block;
                         check_block = check_block->header.next_block;
                     }
                 }else{
+                    log("PMM-> found invalid block, broken chain \n");
                     //This block is invalid, the chain is broken
                     //TODO: Tie the chain back to the beginning block and recover
                     error = true;
@@ -139,6 +143,7 @@ void *pmm::mem_alloc(int size){
                 //INT 80 is temporarily a halt command
                 //asm("int $80");
             }else{
+                log("PMM-> no block found in chain, adding one \n");
                 //There is no space in the whole chain, add another block!
                 block_t *new_block = (block_t*)mem_get_first_free_block();
                 block_init(new_block);
@@ -147,6 +152,7 @@ void *pmm::mem_alloc(int size){
                 current_block->header.next_block = new_block;
             }
         }else{
+            log("PMM-> no, allocating one now \n");
             //There is only this block in this chain, grab another one
             block_t *new_block = (block_t*)mem_get_first_free_block();
             block_init(new_block);
@@ -154,8 +160,8 @@ void *pmm::mem_alloc(int size){
             new_block->header.next_block = current_block;
             current_block->header.next_block = new_block;
             current_block->header.prev_block = new_block;
+            current_block = new_block;
         }
-        //There is not enough space in current block, check all other chained blocks for space, before allocating another block
     }else{
         log("PMM-> space found in current block\n");
         //There is space!,set it as IN_USE and return a pointer to it
@@ -190,9 +196,6 @@ void pmm::block_byte_set_state(block_t *block, uint16_t byte_index, bool state){
 
 void pmm::block_byte_set_state_multiple(block_t *block, uint16_t byte_index, uint16_t count, bool state){
     for(int i = 0; i < count; i++){
-        log("PMM-> block_byte_set_state_multiple setting byte index ");
-        log(itoa(i, tmp, 10));
-        log("\n");
         block_byte_set_state(current_block, byte_index + i, true);
     }
 }

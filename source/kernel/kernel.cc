@@ -13,8 +13,12 @@ void init_pic();
 void parse_multiboot_info(void *mb_info, multiboot_info_t *boot_info);
 
 struct test_struct{
-    uint64_t number_array[10];
+    uint32_t nums[600];
 }typedef lkj_t;
+
+struct test2_struct{
+    uint32_t nums[250];
+}typedef asd_t;
 
 template <typename type> type *kmalloc();
 
@@ -68,17 +72,30 @@ extern "C" void main(void *multiboot_info, unsigned int magic){
     }
 
 
-    uint32_t *test1 = kmalloc<uint32_t>();
-    uint32_t *test2 = kmalloc<uint32_t>();
-    *test1 = 0xffffffffffffffff;
-    *test2 = 100;
+    lkj_t *test1 = kmalloc<lkj_t>();
+    lkj_t *test2 = kmalloc<lkj_t>();
+    test1->nums[599] = 0xffffffffffffffff;
+    test2->nums[0] = 100;
     log(itoa((int)test1, tmp, 10));
     log(" ");
     log(itoa((int)test2, tmp, 10));
     log(" ");
-    log(itoa(*test1, tmp, 10));
+    log(itoa(test1->nums[599], tmp, 10));
     log(" ");
-    log(itoa(*test2, tmp, 10));
+    log(itoa(test2->nums[0], tmp, 10));
+    log("\n");
+
+    asd_t *test3 = kmalloc<asd_t>();
+    asd_t *test4 = kmalloc<asd_t>();
+    test3->nums[249] = 0xffffffffffffffff;
+    test4->nums[0] = 100;
+    log(itoa((int)test3, tmp, 10));
+    log(" ");
+    log(itoa((int)test4, tmp, 10));
+    log(" ");
+    log(itoa(test3->nums[599], tmp, 10));
+    log(" ");
+    log(itoa(test4->nums[0], tmp, 10));
     log("\n");
 
 
