@@ -6,5 +6,6 @@ var searchData=
   ['kernel_5fstart',['kernel_start',['../pmm_8hh.html#ab8881de56be3507ffe02d7d4c9c01967',1,'pmm.hh']]],
   ['key_5fpresses',['key_presses',['../idt_8cc.html#a47fd7d9b2c78d098501f24d8221899cd',1,'idt.cc']]],
   ['kmalloc',['kmalloc',['../kernel_8cc.html#a73d675374d435a75f8805f81f54c5ae5',1,'kernel.cc']]],
+  ['kprintf',['kprintf',['../namespacetxt.html#a8e34ceb4c7fddb75dcb70f2e8d245819',1,'txt']]],
   ['krnl_5fload_5faddr',['krnl_load_addr',['../structmultiboot__info__t.html#a6df6987002bc3edc2b4cb238c19f6f25',1,'multiboot_info_t']]]
 ];

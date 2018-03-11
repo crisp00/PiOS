@@ -1,20 +1,19 @@
 #include "headers/pmm.hh"
+#include "../libh/stdlib.hh"
 
 using namespace pmm;
 
 block_t *current_block = 0;
 
 static uint8_t *bitmap = (uint8_t *)&kernel_end + 50000;
-void pmm::init(multiboot_info_t boot_info, TxtConsole *console){
-    txt::setAttribute(TxtAttribute(TXT_COLOR_WHITE, TXT_COLOR_DARK_GRAY));
-    set_all(console);
+void pmm::init(multiboot_info_t boot_info){
+    set_all();
     bool done = false;
     int cur = 0;
     while(!done){
         bitmap_put_region(boot_info.memory_map[cur].addr,
                             boot_info.memory_map[cur].len, 
                             (boot_info.memory_map[cur].type) != 1);
-        txt::kprintf("x");
         if(!boot_info.memory_map[cur].present){
             done = true;
         }
@@ -35,9 +34,8 @@ bool pmm::bitmap_get(unsigned int index){
     return (bitmap[index / 8] & (1 << (index % 8))) > 0;
 }
 
-void pmm::set_all(TxtConsole *console){
+void pmm::set_all(){
     for (int i = 0; i < BITMAP_ARRAY_SIZE; i++){
-        //txt::kprintf("y");
         bitmap[i] = 255;
     }
     return;
@@ -84,18 +82,28 @@ void *pmm::mem_get_first_free_block(){
     return (void *)0;
 }
 
-
+char tmp[100];
 void *pmm::mem_alloc(int size){
+    log("PMM-> mem_alloc()\n");
+
     //There is no block yet, get one now
     if((int)current_block == 0){
+        log("PMM-> no block yet, allocating first one\n");
         current_block = (block_t *)mem_get_first_free_block();
         block_init(current_block);
     }
+
     //There is a block, is there enough space inside it?
     int in_current = block_byte_get_contiguous(current_block, size);
 
+    log("PMM-> Block map:\n");
+    for(int i_ = 0; i_ < 10; i_++){
+        log(itoa(current_block->map.map[i_], tmp, 2));
+        log("\n");
+    }
+    log("PMM-> end block map\n");
     if(in_current == BLOCK_NO_SPACE){
-        txt::kprintf("no space in current block");
+        log("PMM-> no space in current block\n");
         //There is no space in this block, are there other blocks in the chain?
         if(current_block->header.next_block != current_block){
             //There are other blocks in the chain, check them all
@@ -149,7 +157,7 @@ void *pmm::mem_alloc(int size){
         }
         //There is not enough space in current block, check all other chained blocks for space, before allocating another block
     }else{
-        txt::kprintf("space found in current block");
+        log("PMM-> space found in current block\n");
         //There is space!,set it as IN_USE and return a pointer to it
         block_byte_set_state_multiple(current_block, in_current, size, true);
         return (void *)&(current_block->space[in_current]);
@@ -182,11 +190,16 @@ void pmm::block_byte_set_state(block_t *block, uint16_t byte_index, bool state){
 
 void pmm::block_byte_set_state_multiple(block_t *block, uint16_t byte_index, uint16_t count, bool state){
     for(int i = 0; i < count; i++){
-        block_byte_set_state(current_block, byte_index, true);
+        log("PMM-> block_byte_set_state_multiple setting byte index ");
+        log(itoa(i, tmp, 10));
+        log("\n");
+        block_byte_set_state(current_block, byte_index + i, true);
     }
 }
 
 uint16_t pmm::block_byte_get_contiguous(block_t *block, uint16_t count){
+    log("PMM-> block_byte_get_contiguous()\n");
+
     int contiguous = count;
     int i;
     for(i = 0; i < BLOCK_SPACE_LENGTH && contiguous != 0; i++){

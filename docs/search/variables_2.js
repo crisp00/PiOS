@@ -10,6 +10,7 @@ var searchData=
   ['cseg_5f16',['cseg_16',['../structmultiboot__tag__apm.html#ae10031b73878b35c3fd332193293fd6d',1,'multiboot_tag_apm']]],
   ['cseg_5f16_5flen',['cseg_16_len',['../structmultiboot__tag__apm.html#ac9ce4f6a6baa2cd0fea47ab1b4802e7b',1,'multiboot_tag_apm']]],
   ['cseg_5flen',['cseg_len',['../structmultiboot__tag__apm.html#ab6707ad19a33da4a07b1e3a747c3da16',1,'multiboot_tag_apm']]],
+  ['cur_5fattr',['cur_attr',['../namespacetxt.html#a9db5ed793e416aca21d2c09744971efe',1,'txt']]],
   ['current_5fblock',['current_block',['../pmm_8cc.html#aa4eb1ab7bda884c62791867f468fa808',1,'pmm.cc']]],
-  ['cursor',['cursor',['../class_txt_console.html#addbf75ff6c44d8e764d16f41988435c5',1,'TxtConsole']]]
+  ['cursor',['cursor',['../class_txt_console.html#addbf75ff6c44d8e764d16f41988435c5',1,'TxtConsole::cursor()'],['../namespacetxt.html#a6363137570c2b3cd40e6fd64845dd361',1,'txt::cursor()']]]
 ];

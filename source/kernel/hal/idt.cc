@@ -1,7 +1,7 @@
 #include "headers/idt.hh"
 #include "headers/pic.hh"
 
-#include "../libh/txtconsole.hh"
+#include "../libh/stdlib.hh"
 
 // struct IDTDescr {
 //    uint16_t offset_1; // offset bits 0..15
@@ -41,6 +41,7 @@ IDTDescr_t makeDescriptor(uint32_t addr, uint16_t selector){
 int count = 0;
 int pic_ticks = 0;
 int key_presses = 0;
+static char tmp[100];
 extern "C" void CINTHandle(int intnum, int errnum){
     //TxtConsole console = *txt::getConsole();
     if (intnum >= 32 && intnum <= 48)
@@ -56,13 +57,12 @@ extern "C" void CINTHandle(int intnum, int errnum){
         }
         PIC_sendEOI(intnum);
     }else{
+        log("IDT-> INT ");
+        log(itoa(intnum, tmp, 10));
+        log("\n");
         count++;
-        // console.moveCursor(0, 0);
-        TxtAttribute test(TXT_COLOR_WHITE, TXT_COLOR_RED);
-        txt::kprintf("PiOS 2 - INTERRUPT ");
-        //txt::kprntf(itoa(intnum); << " ERROR CODE " << errnum << " COUNT " << count;
         if(intnum == 80){
-            txt::kprintf("\n FATAL PIOS INTERNAL ERROR - SYSTEM HALTED");
+            log("\n FATAL PIOS INTERNAL ERROR - SYSTEM HALTED");
             asm("cli;hlt");
         }
     }

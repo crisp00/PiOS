@@ -23,5 +23,5 @@ var searchData=
   ['preference',['preference',['../structmultiboot__header__tag__relocatable.html#ac509d86587d7dd64a03ea53c267117c8',1,'multiboot_header_tag_relocatable']]],
   ['present',['present',['../structmmap__entry__t.html#a3750c44b8da9a8a9faf5204539cefaf0',1,'mmap_entry_t']]],
   ['print',['print',['../class_txt_console.html#ab0ab56e0b0dca549efe452c161ac8dc4',1,'TxtConsole']]],
-  ['putchar',['putChar',['../class_txt_console.html#a2e2c41dca398e40aae305879930b5016',1,'TxtConsole']]]
+  ['putchar',['putChar',['../class_txt_console.html#a2e2c41dca398e40aae305879930b5016',1,'TxtConsole::putChar()'],['../namespacetxt.html#afb43d097da34c4e2c25d9f0444b93674',1,'txt::putChar()']]]
 ];

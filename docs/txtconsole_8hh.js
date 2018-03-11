@@ -19,5 +19,12 @@ var txtconsole_8hh =
     [ "TXT_COLOR_MAGENTA", "txtconsole_8hh.html#a8ec9c99c5f789f11d63f94c5208c8a87", null ],
     [ "TXT_COLOR_RED", "txtconsole_8hh.html#a41044554e627d719987dac5f2fca2e1e", null ],
     [ "TXT_COLOR_WHITE", "txtconsole_8hh.html#aa50050963d68b799d5337a00f7e4485b", null ],
-    [ "TXT_COLOR_YELLOW", "txtconsole_8hh.html#a18d593a8f2f0629d962c049655e4da11", null ]
+    [ "TXT_COLOR_YELLOW", "txtconsole_8hh.html#a18d593a8f2f0629d962c049655e4da11", null ],
+    [ "clear", "txtconsole_8hh.html#a0966acc2c848e373190caf72ba5917c5", null ],
+    [ "getConsole", "txtconsole_8hh.html#a4546609b751617330133780fa57343ac", null ],
+    [ "init", "txtconsole_8hh.html#ad8cbc097538bb654e2b6f59ec49a9ae0", null ],
+    [ "kprintf", "txtconsole_8hh.html#a8e34ceb4c7fddb75dcb70f2e8d245819", null ],
+    [ "moveCursor", "txtconsole_8hh.html#a3a3f8b0db9beaba7ccf975c277460609", null ],
+    [ "putChar", "txtconsole_8hh.html#afb43d097da34c4e2c25d9f0444b93674", null ],
+    [ "setAttribute", "txtconsole_8hh.html#a7ba228e95c00e0654f2bfbc9db889d3a", null ]
 ];

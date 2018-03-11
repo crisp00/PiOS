@@ -2,6 +2,7 @@ var searchData=
 [
   ['tables',['tables',['../structmultiboot__tag__smbios.html#ad0da28f2ea98e9c8f35a22c6a571f4a2',1,'multiboot_tag_smbios']]],
   ['test_5fstruct',['test_struct',['../structtest__struct.html',1,'']]],
+  ['txt',['txt',['../namespacetxt.html',1,'']]],
   ['txt_5fcolor_5fblack',['TXT_COLOR_BLACK',['../txtconsole_8hh.html#a828c7dcc2432207ee7324e86670168c7',1,'txtconsole.hh']]],
   ['txt_5fcolor_5fblue',['TXT_COLOR_BLUE',['../txtconsole_8hh.html#ac9c38f777083e3e87c3a09da535bc529',1,'txtconsole.hh']]],
   ['txt_5fcolor_5fbrown',['TXT_COLOR_BROWN',['../txtconsole_8hh.html#a5bae2092486fbeacca7c0021428b21c7',1,'txtconsole.hh']]],

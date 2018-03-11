@@ -48,7 +48,7 @@ struct __attribute__((packed)) pmm_block{
     @params boot_info info structure generated in parse_multiboot_info() in kernel.cc
 
  */
-void init(multiboot_info_t boot_info, TxtConsole *console);
+void init(multiboot_info_t boot_info);
 
 /*! 
     @param address Memory address
@@ -87,7 +87,7 @@ void bitmap_put_region(uint64_t start, uint64_t length, bool value);
 /*! @brief Set all memory as used, used for initialization.
 
  */
-void set_all(TxtConsole *console);
+void set_all();
 
 /*! @brief Count how many 4K memory blocks are free to use
 

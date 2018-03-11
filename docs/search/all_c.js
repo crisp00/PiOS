@@ -15,7 +15,7 @@ var searchData=
   ['mmap_5fentry_5ft',['mmap_entry_t',['../structmmap__entry__t.html',1,'']]],
   ['mod_5fend',['mod_end',['../structmultiboot__tag__module.html#ae0a4f42952619e0807cbb5debbf6e5af',1,'multiboot_tag_module']]],
   ['mod_5fstart',['mod_start',['../structmultiboot__tag__module.html#af2870ead515a1c38d4484645ab54fb03',1,'multiboot_tag_module']]],
-  ['movecursor',['moveCursor',['../class_txt_console.html#aa9a1c05bed6419d7ab2a4a1792703dc7',1,'TxtConsole']]],
+  ['movecursor',['moveCursor',['../class_txt_console.html#aa9a1c05bed6419d7ab2a4a1792703dc7',1,'TxtConsole::moveCursor()'],['../namespacetxt.html#a3a3f8b0db9beaba7ccf975c277460609',1,'txt::moveCursor()']]],
   ['multiboot_2ehh',['multiboot.hh',['../multiboot_8hh.html',1,'']]],
   ['multiboot_2einc',['multiboot.inc',['../multiboot_8inc.html',1,'']]],
   ['multiboot2_5fbootloader_5fmagic',['MULTIBOOT2_BOOTLOADER_MAGIC',['../multiboot_8hh.html#a18088e9abdbc843745e5e59973481475',1,'multiboot.hh']]],

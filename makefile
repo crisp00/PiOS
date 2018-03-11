@@ -15,10 +15,10 @@ AS = nasm
 build: 	build/pios.iso
 
 run:	build/pios.iso
-	qemu-system-x86_64 -boot d -cdrom $< -m 512 
+	qemu-system-x86_64 -boot d -cdrom $< -m 512 -serial stdio
 
 debug:	build/pios.iso
-	qemu-system-x86_64 -boot d -kernel ./build/kernel/pi_kernel.bin -cdrom $< -m 512 -d int,cpu_reset -append "root=/dev/sda2 console=tty0 console=ttyS0 rw" -serial stdio
+	qemu-system-x86_64 -boot d -cdrom $< -m 512 -d int,cpu_reset
 
 clean:
 

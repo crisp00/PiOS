@@ -1,6 +1,6 @@
 #include <stdint.h>
 #include "multiboot.hh"
-#include "../libh/txtconsole.hh"
+#include "../libh/txt.hh"
 
 #ifndef PIOS_KERNEL_INFO
 #define PIOS_KERNEL_INFO

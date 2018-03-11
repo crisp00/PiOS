@@ -1,4 +1,6 @@
 #include "../libh/stdlib.hh"
+#include "../libh/txt.hh"
+#include "../hal/headers/serial.hh"
 
 /* A utility function to reverse a string  */
 void reverse(char str[], int length)
@@ -88,4 +90,9 @@ char *ulltoa(unsigned long long num, char *str, int base)
     reverse(str, i);
 
     return str;
+}
+
+void log(char *str){
+    txt::putstring(str);
+    serial::putstring(str);
 }

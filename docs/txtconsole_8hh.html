@@ -82,7 +82,9 @@ $(document).ready(function(){initNavTree('txtconsole_8hh.html','');});
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#define-members">Macros</a>  </div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#define-members">Macros</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">txtconsole.hh File Reference</div>  </div>
 </div><!--header-->
@@ -104,6 +106,11 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_txt_console.html">TxtConsole</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Text Mode console, use for early output.  <a href="class_txt_console.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespacetxt"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetxt.html">txt</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
@@ -140,6 +147,27 @@ Macros</h2></td></tr>
 <tr class="separator:a18d593a8f2f0629d962c049655e4da11"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa50050963d68b799d5337a00f7e4485b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="txtconsole_8hh.html#aa50050963d68b799d5337a00f7e4485b">TXT_COLOR_WHITE</a>&#160;&#160;&#160;15</td></tr>
 <tr class="separator:aa50050963d68b799d5337a00f7e4485b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ad8cbc097538bb654e2b6f59ec49a9ae0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetxt.html#ad8cbc097538bb654e2b6f59ec49a9ae0">txt::init</a> ()</td></tr>
+<tr class="separator:ad8cbc097538bb654e2b6f59ec49a9ae0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb43d097da34c4e2c25d9f0444b93674"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetxt.html#afb43d097da34c4e2c25d9f0444b93674">txt::putChar</a> (char c)</td></tr>
+<tr class="memdesc:afb43d097da34c4e2c25d9f0444b93674"><td class="mdescLeft">&#160;</td><td class="mdescRight">writes a character at cursor position, with current attribute.  <a href="namespacetxt.html#afb43d097da34c4e2c25d9f0444b93674">More...</a><br /></td></tr>
+<tr class="separator:afb43d097da34c4e2c25d9f0444b93674"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a3f8b0db9beaba7ccf975c277460609"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetxt.html#a3a3f8b0db9beaba7ccf975c277460609">txt::moveCursor</a> (int x, int y)</td></tr>
+<tr class="memdesc:a3a3f8b0db9beaba7ccf975c277460609"><td class="mdescLeft">&#160;</td><td class="mdescRight">moves the cursor to x, y.  <a href="namespacetxt.html#a3a3f8b0db9beaba7ccf975c277460609">More...</a><br /></td></tr>
+<tr class="separator:a3a3f8b0db9beaba7ccf975c277460609"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ba228e95c00e0654f2bfbc9db889d3a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetxt.html#a7ba228e95c00e0654f2bfbc9db889d3a">txt::setAttribute</a> (<a class="el" href="class_txt_attribute.html">TxtAttribute</a> attribute)</td></tr>
+<tr class="memdesc:a7ba228e95c00e0654f2bfbc9db889d3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">sets the attribute to use from now on.  <a href="namespacetxt.html#a7ba228e95c00e0654f2bfbc9db889d3a">More...</a><br /></td></tr>
+<tr class="separator:a7ba228e95c00e0654f2bfbc9db889d3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0966acc2c848e373190caf72ba5917c5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetxt.html#a0966acc2c848e373190caf72ba5917c5">txt::clear</a> (<a class="el" href="class_txt_char.html">TxtChar</a> tChar)</td></tr>
+<tr class="separator:a0966acc2c848e373190caf72ba5917c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e34ceb4c7fddb75dcb70f2e8d245819"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetxt.html#a8e34ceb4c7fddb75dcb70f2e8d245819">txt::kprintf</a> (char *str)</td></tr>
+<tr class="memdesc:a8e34ceb4c7fddb75dcb70f2e8d245819"><td class="mdescLeft">&#160;</td><td class="mdescRight">fills the screen with tChar  <a href="namespacetxt.html#a8e34ceb4c7fddb75dcb70f2e8d245819">More...</a><br /></td></tr>
+<tr class="separator:a8e34ceb4c7fddb75dcb70f2e8d245819"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4546609b751617330133780fa57343ac"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_txt_console.html">TxtConsole</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetxt.html#a4546609b751617330133780fa57343ac">txt::getConsole</a> ()</td></tr>
+<tr class="separator:a4546609b751617330133780fa57343ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a828c7dcc2432207ee7324e86670168c7"></a>
