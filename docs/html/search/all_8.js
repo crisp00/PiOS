@@ -1,7 +1,8 @@
 var searchData=
 [
-  ['main',['main',['../kernel_8cc.html#acdef7a1fd863a6d3770c1268cb06add3',1,'kernel.cc']]],
-  ['makedescriptor',['makeDescriptor',['../idt_8hh.html#a690cc0ada14b105ae39046e8659d9748',1,'makeDescriptor(uint32_t addr, uint16_t selector):&#160;idt.cc'],['../idt_8cc.html#a690cc0ada14b105ae39046e8659d9748',1,'makeDescriptor(uint32_t addr, uint16_t selector):&#160;idt.cc']]],
-  ['movecursor',['moveCursor',['../class_txt_console.html#aa9a1c05bed6419d7ab2a4a1792703dc7',1,'TxtConsole']]],
-  ['multiboot_2einc',['multiboot.inc',['../multiboot_8inc.html',1,'']]]
+  ['header_5faddr',['header_addr',['../structmultiboot__header__tag__address.html#ae8de19e0b2cb004cc82fd5e1aa54024e',1,'multiboot_header_tag_address']]],
+  ['header_5flength',['header_length',['../structmultiboot__header.html#a5356113fb7e9e82c081374a6ab2ae509',1,'multiboot_header']]],
+  ['height',['height',['../structmultiboot__header__tag__framebuffer.html#acfaa9a5efd3ee21247061fdafafafee6',1,'multiboot_header_tag_framebuffer::height()'],['../class_txt_console.html#a63a974a1b8cfed627f9d6ca3ebd918af',1,'TxtConsole::height()']]],
+  ['hwio_2ecc',['hwio.cc',['../hwio_8cc.html',1,'']]],
+  ['hwio_2ehh',['hwio.hh',['../hwio_8hh.html',1,'']]]
 ];

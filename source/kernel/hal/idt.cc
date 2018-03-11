@@ -42,24 +42,29 @@ int count = 0;
 int pic_ticks = 0;
 int key_presses = 0;
 extern "C" void CINTHandle(int intnum, int errnum){
-    TxtConsole console = TxtConsole();
+    //TxtConsole console = *txt::getConsole();
     if (intnum >= 32 && intnum <= 48)
     {
         if(intnum == 32){
             pic_ticks++;
-            console.moveCursor(5, 20);
-            console<<pic_ticks;
+            //console.moveCursor(5, 20);
+            // console<<pic_ticks;
         }else if(intnum == 33){
             key_presses++;
-            console.moveCursor(5, 5);
-            console<<"kbd "<<key_presses;
+            //console.moveCursor(5, 5);
+            //console<<"kbd "<<key_presses;
         }
         PIC_sendEOI(intnum);
     }else{
         count++;
-        console.moveCursor(0, 0);
+        // console.moveCursor(0, 0);
         TxtAttribute test(TXT_COLOR_WHITE, TXT_COLOR_RED);
-        console << "PiOS " << 2 << test << " INTERRUPT " << intnum << " ERROR CODE " << errnum << " COUNT " << count;
+        txt::kprintf("PiOS 2 - INTERRUPT ");
+        //txt::kprntf(itoa(intnum); << " ERROR CODE " << errnum << " COUNT " << count;
+        if(intnum == 80){
+            txt::kprintf("\n FATAL PIOS INTERNAL ERROR - SYSTEM HALTED");
+            asm("cli;hlt");
+        }
     }
     return;
 }

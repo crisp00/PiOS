@@ -18,7 +18,7 @@ run:	build/pios.iso
 	qemu-system-x86_64 -boot d -cdrom $< -m 512 
 
 debug:	build/pios.iso
-	qemu-system-x86_64 -boot d -cdrom $< -m 512 -d int,cpu_reset
+	qemu-system-x86_64 -boot d -kernel ./build/kernel/pi_kernel.bin -cdrom $< -m 512 -d int,cpu_reset -append "root=/dev/sda2 console=tty0 console=ttyS0 rw" -serial stdio
 
 clean:
 

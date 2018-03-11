@@ -1,4 +1,30 @@
 var searchData=
 [
-  ['entry_2ehh',['entry.hh',['../entry_8hh.html',1,'']]]
+  ['biosdev',['biosdev',['../structmultiboot__tag__bootdev.html#a2bcf5d32579dc281148607d937ca099b',1,'multiboot_tag_bootdev']]],
+  ['bitmap_5farray_5fsize',['BITMAP_ARRAY_SIZE',['../pmm_8hh.html#a29cceca5f4eb436af2cd8b6a8b87ba98',1,'pmm.hh']]],
+  ['bitmap_5fcount_5ffree_5fblocks',['bitmap_count_free_blocks',['../namespacepmm.html#a89cf0ae7b06be47543ae5b5f2e469f8d',1,'pmm']]],
+  ['bitmap_5ffree',['BITMAP_FREE',['../pmm_8hh.html#a313921c345aa6084a33b61aa5378c16d',1,'pmm.hh']]],
+  ['bitmap_5fget',['bitmap_get',['../namespacepmm.html#aedd3defea956f456c15480345e0d25f1',1,'pmm']]],
+  ['bitmap_5fget_5faddress_5ffrom_5findex',['bitmap_get_address_from_index',['../namespacepmm.html#ae22cb597831f94551d92b8925e784441',1,'pmm']]],
+  ['bitmap_5fget_5findex_5ffrom_5faddress',['bitmap_get_index_from_address',['../namespacepmm.html#ac90280396e72b2fe1e0f8357ebbc5a76',1,'pmm']]],
+  ['bitmap_5flength',['BITMAP_LENGTH',['../pmm_8hh.html#a9acc4e3578a56d0a28557ed0698e7082',1,'pmm.hh']]],
+  ['bitmap_5fput',['bitmap_put',['../namespacepmm.html#a967f3671c6d153653cc22f0c631092b2',1,'pmm']]],
+  ['bitmap_5fput_5fregion',['bitmap_put_region',['../namespacepmm.html#ab4142463392c97de234d9c402600f46b',1,'pmm']]],
+  ['bitmap_5fused',['BITMAP_USED',['../pmm_8hh.html#a985200be8ac62581ac9b272d50be5b3f',1,'pmm.hh']]],
+  ['block_5fbyte_5fget_5fcontiguous',['block_byte_get_contiguous',['../namespacepmm.html#a69d8db5f1222ea1ac9fdf3633d839907',1,'pmm']]],
+  ['block_5fbyte_5fget_5fstate',['block_byte_get_state',['../namespacepmm.html#a62e980e1dbe2c8989aa6eba3be20ecf9',1,'pmm']]],
+  ['block_5fbyte_5fset_5fstate',['block_byte_set_state',['../namespacepmm.html#a96a7c8f8e6dacd288fc3681cf33a664a',1,'pmm']]],
+  ['block_5fbyte_5fset_5fstate_5fmultiple',['block_byte_set_state_multiple',['../namespacepmm.html#a74f4fb478115b759a0563a53795679f2',1,'pmm']]],
+  ['block_5fheader_5flength',['BLOCK_HEADER_LENGTH',['../pmm_8hh.html#acc4770fe09b0843dfa43de464a65cad9',1,'pmm.hh']]],
+  ['block_5fheader_5fmagic',['BLOCK_HEADER_MAGIC',['../pmm_8hh.html#aecd2d6ab204449b1740bec8acedc5466',1,'pmm.hh']]],
+  ['block_5fheader_5ft',['block_header_t',['../namespacepmm.html#a9828701991b5e356c44b919739e32168',1,'pmm']]],
+  ['block_5finit',['block_init',['../namespacepmm.html#a4127b91ff8314e648b1d1df2043c70c3',1,'pmm']]],
+  ['block_5fmap_5flength',['BLOCK_MAP_LENGTH',['../pmm_8hh.html#a324949c5476146cbf7886bd351ff963e',1,'pmm.hh']]],
+  ['block_5fmap_5ft',['block_map_t',['../namespacepmm.html#aa13f7c1f8e2463f8a42b7747bd982460',1,'pmm']]],
+  ['block_5fno_5fspace',['BLOCK_NO_SPACE',['../pmm_8hh.html#ad5e0db3b973d2feb3baafd858adb96d3',1,'pmm.hh']]],
+  ['block_5fspace_5flength',['BLOCK_SPACE_LENGTH',['../pmm_8hh.html#a68154861944e840da5a084a4afad190c',1,'pmm.hh']]],
+  ['block_5ft',['block_t',['../namespacepmm.html#a86eb47cb72318eb1fec4e8e3816434d1',1,'pmm']]],
+  ['blue',['blue',['../structmultiboot__color.html#a6f8d17b0f35ff4cbf9c51dcbc3ea7d01',1,'multiboot_color']]],
+  ['boot_5finfo',['boot_info',['../kernel_8cc.html#aabdfcc9a19d8210964c59e1a264286a2',1,'kernel.cc']]],
+  ['bss_5fend_5faddr',['bss_end_addr',['../structmultiboot__header__tag__address.html#ac3de23d94c391584665ba64757451a37',1,'multiboot_header_tag_address']]]
 ];

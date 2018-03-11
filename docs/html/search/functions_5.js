@@ -1,5 +1,8 @@
 var searchData=
 [
-  ['operator_3c_3c',['operator&lt;&lt;',['../class_txt_console.html#a40598346768d266ed7890c8959d16fed',1,'TxtConsole::operator&lt;&lt;(char a)'],['../class_txt_console.html#a713bf2055182feabfe146ecd93ae6753',1,'TxtConsole::operator&lt;&lt;(char a[])'],['../class_txt_console.html#a92a8e1658f62ef8e4e83b224a156f81d',1,'TxtConsole::operator&lt;&lt;(int d)'],['../class_txt_console.html#abc2703e38d6a96503790ff95c6c69e23',1,'TxtConsole::operator&lt;&lt;(TxtAttribute attr)']]],
-  ['outb',['outb',['../hwio_8hh.html#a8bf7a9af91c08e6f876aaffeccd48ff3',1,'outb(uint16_t port, uint8_t val):&#160;hwio.cc'],['../hwio_8cc.html#a8bf7a9af91c08e6f876aaffeccd48ff3',1,'outb(uint16_t port, uint8_t val):&#160;hwio.cc']]]
+  ['inb',['inb',['../hwio_8hh.html#a2e1e8e2c5724c1e8fd2dff2eada06479',1,'inb(uint16_t port):&#160;hwio.cc'],['../hwio_8cc.html#a2e1e8e2c5724c1e8fd2dff2eada06479',1,'inb(uint16_t port):&#160;hwio.cc']]],
+  ['init',['init',['../namespacepmm.html#aeabb890fba4023e0b2c826a21bb79f83',1,'pmm']]],
+  ['init_5fpic',['init_pic',['../kernel_8cc.html#ae2b22a13a33a6feb68b115e5419d9dce',1,'kernel.cc']]],
+  ['install_5fidt',['install_idt',['../idt_8hh.html#a4acdc6d6294313b1aae6d032bb42bf2d',1,'install_idt():&#160;idt.cc'],['../idt_8cc.html#a4acdc6d6294313b1aae6d032bb42bf2d',1,'install_idt():&#160;idt.cc']]],
+  ['itoa',['itoa',['../stdlib_8cc.html#ae19bd40ad70d698198d020500fc66988',1,'itoa(int num, char *str, int base):&#160;stdlib.cc'],['../stdlib_8hh.html#ae19bd40ad70d698198d020500fc66988',1,'itoa(int num, char *str, int base):&#160;stdlib.cc']]]
 ];

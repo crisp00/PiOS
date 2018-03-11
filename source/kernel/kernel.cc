@@ -5,14 +5,23 @@
 #include "hal/headers/pic.hh"
 #include "headers/multiboot.hh"
 #include "headers/kernel_info.hh"
+#include "hal/headers/pmm.hh"
 
 static char* tmp;
 void init_pic();
 void parse_multiboot_info(void *mb_info, multiboot_info_t *boot_info, TxtConsole *console);
 
+struct test_struct{
+    uint64_t number_array[10];
+}typedef lkj_t;
+
+template <typename type> type *kmalloc();
+
+TxtConsole console;
+
 multiboot_info_t boot_info;
 extern "C" void main(void *multiboot_info, unsigned int magic){
-    TxtConsole console = TxtConsole();
+    console = TxtConsole();
     console.clear(TxtChar(' ', TxtAttribute(TXT_COLOR_WHITE, TXT_COLOR_DARK_GRAY)));
     console.moveCursor(0, 1);
 
@@ -29,37 +38,57 @@ extern "C" void main(void *multiboot_info, unsigned int magic){
     asm("sti");
     console<<"PiOS "<<2<<test<<" Going GOOD!!!";
     parse_multiboot_info(multiboot_info, &boot_info, &console);
-
+    pmm::init(boot_info, &console);
+    console<<"\n Free blocks: ";
+    console<<pmm::bitmap_count_free_blocks();
+    lkj_t *r = kmalloc<lkj_t>();
+    lkj_t *t = kmalloc<lkj_t>();
+    console<<"\n"<<itoa((uint64_t)r, tmp, 10);
+    console<<"\n"<<itoa((uint64_t)t, tmp, 10);
+    console<<"\n"<<itoa((uint64_t)&kernel_end, tmp, 10);
+    console<<"\n"<<itoa(sizeof(lkj_t), tmp, 10);
+    txt::kprintf("PASS");
     bool done = false;
     int i = 0;
     while(!done){
         mmap_entry_t cur = boot_info.memory_map[i];
         if (cur.present)
         {
-            console << '\n';
-            console<<" - #";
-            console<<i;
-            console<<" Addr: ";
-            console<<ulltoa(cur.addr, tmp, 10);
-            console<<" Len: ";
-            console << ulltoa(cur.len, tmp, 10);
-            console<<" Type: ";
-            console << itoa(cur.type, tmp, 16);
+            txt::kprintf("\n");
+            txt::kprintf(" - #");
+            txt::kprintf(itoa(i, tmp, 10));
+            txt::kprintf(" Addr: ");
+            txt::kprintf(ulltoa(cur.addr, tmp, 10));
+            txt::kprintf(" Len: ");
+            txt::kprintf( ulltoa(cur.len, tmp, 10));
+            txt::kprintf(" Type: ");
+            txt::kprintf( itoa(cur.type, tmp, 16));
         }else{
             done = true;
         }
         i++;
     }
 
+    bool x = pmm::bitmap_get(69);
+    pmm::bitmap_put(69, !x);
+    if(pmm::bitmap_get(69) != x) {
+        console<<"\n PASS 1";
+    }
+    pmm::bitmap_put(69, x);
+    if(pmm::bitmap_get(69) == x) {
+        console<<"\n PASS 2\n";
+    }
+
+    pmm::bitmap_put_region(0, 200, true);
+    for(int i = 0; i < 100; i++){
+        console<<pmm::bitmap_get(i);
+    }
     int count = 0;
-    asm("int $69");
     while(true){
         console.moveCursor(70, 20);
         console<<count;
         count++;
-        for(int i = 0; i < 500000000; i++){
-            asm("nop");
-        }
+
     }
 }
 
@@ -103,4 +132,8 @@ void parse_multiboot_info(void *mb_info, multiboot_info_t *boot_info, TxtConsole
             current = current + ((tag.size + 8) / 8) * 8;
         }
     }
+}
+
+template <typename type> type *kmalloc(){
+    return (type *)pmm::mem_alloc(sizeof(type));
 }

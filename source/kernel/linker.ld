@@ -3,6 +3,7 @@ ENTRY(start)
 SECTIONS
 {
   . = 1M;
+  kernel_start = .;
   .boot : {
     *(.multiboot_header)
   }
@@ -25,5 +26,5 @@ SECTIONS
     *(.gdt)
     . = ALIGN(4096);
   }
-  krnlend = .;
+  kernel_end = .;
 }

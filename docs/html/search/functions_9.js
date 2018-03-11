@@ -1,6 +1,9 @@
 var searchData=
 [
-  ['txtattribute',['TxtAttribute',['../class_txt_attribute.html#a12d4c1e8fd1586f315a9865a26beaf33',1,'TxtAttribute::TxtAttribute()'],['../class_txt_attribute.html#a328aa522c45027489014679b4bc679d4',1,'TxtAttribute::TxtAttribute(uint8_t attribute)'],['../class_txt_attribute.html#aada0e3759c368546ed63db12de53183f',1,'TxtAttribute::TxtAttribute(uint8_t background, uint8_t foreground)']]],
-  ['txtchar',['TxtChar',['../class_txt_char.html#a29eea9782c5de04b2ebd786789f7cbe2',1,'TxtChar::TxtChar(uint8_t asciiChar, uint8_t colorCode)'],['../class_txt_char.html#a3d240a34600a261a6c92955f48b0b02a',1,'TxtChar::TxtChar(uint8_t asciiChar, TxtAttribute attribute)']]],
-  ['txtconsole',['TxtConsole',['../class_txt_console.html#a9aae6da396ce83990900c29c76a12c93',1,'TxtConsole::TxtConsole()'],['../class_txt_console.html#a64cfdc73513a82064b33a17e4ce9e8f7',1,'TxtConsole::TxtConsole(int width, int height)']]]
+  ['parse_5fmultiboot_5finfo',['parse_multiboot_info',['../kernel_8cc.html#af1b3a01ecdb8e062d65bc0d1fd667083',1,'kernel.cc']]],
+  ['pic_5fremap',['PIC_remap',['../pic_8hh.html#ab5ed5530bfeaffadd8cd88c06d797f31',1,'PIC_remap(int offset1, int offset2):&#160;pic.cc'],['../pic_8cc.html#ab5ed5530bfeaffadd8cd88c06d797f31',1,'PIC_remap(int offset1, int offset2):&#160;pic.cc']]],
+  ['pic_5fsendeoi',['PIC_sendEOI',['../pic_8hh.html#ab81a3ae59f611b5e57b2e522e7129cb6',1,'PIC_sendEOI(uint8_t irq):&#160;pic.cc'],['../pic_8cc.html#ab81a3ae59f611b5e57b2e522e7129cb6',1,'PIC_sendEOI(uint8_t irq):&#160;pic.cc']]],
+  ['pios_5finstall_5fidt',['PIOS_install_idt',['../idt_8hh.html#ad5941f38b52ec2343ac4b6af126bf73c',1,'idt.hh']]],
+  ['print',['print',['../class_txt_console.html#ab0ab56e0b0dca549efe452c161ac8dc4',1,'TxtConsole']]],
+  ['putchar',['putChar',['../class_txt_console.html#a2e2c41dca398e40aae305879930b5016',1,'TxtConsole']]]
 ];

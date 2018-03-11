@@ -1,5 +1,8 @@
 #include <stdint.h>
 
+#ifndef PIOS_TXT_CONSOLE
+#define PIOS_TXT_CONSOLE
+
 #define TXT_COLOR_BLACK 0
 #define TXT_COLOR_BLUE 1
 #define TXT_COLOR_GREEN 2
@@ -81,3 +84,15 @@ class TxtConsole{
     protected:
         int getIndexFromCoordinates(int x, int y);
 };
+
+namespace txt{
+    void init();
+    void putChar(char c); /**< \brief writes a character at cursor position, with current attribute. @param c char to print. */
+    void moveCursor(int x, int y);  /**< \brief moves the cursor to x, y. */
+    void setAttribute(TxtAttribute attribute); /**<  \brief sets the attribute to use from now on. @param attribute TxtAttribute to use */
+    void clear(TxtChar tChar); /** \brief fills the screen with tChar */
+    void kprintf(char *str);/**< \brief prints a \0 terminated character array to the screen */
+    TxtConsole *getConsole();
+}
+
+#endif

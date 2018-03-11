@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['selector',['selector',['../struct_i_d_t_descr__t.html#a91b5a2691d985f93b514558fb52dad2c',1,'IDTDescr_t']]]
+  ['green',['green',['../structmultiboot__color.html#a08e1c8bc977b39015c9043645e79713d',1,'multiboot_color']]]
 ];

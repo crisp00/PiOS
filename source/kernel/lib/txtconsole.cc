@@ -107,3 +107,49 @@ TxtAttribute::TxtAttribute(uint8_t attribute){
 TxtAttribute::TxtAttribute(){
 
 }
+
+namespace txt{
+    uint16_t width = 80, height = 25;
+    uint16_t *vidmem = (uint16_t *)0xB8000;
+    TxtAttribute cur_attr(TXT_COLOR_BLACK, TXT_COLOR_LIGHT_BLUE);
+    TxtCursor cursor = TxtCursor();
+    void putChar(char c){
+        if(c == '\n'){
+            moveCursor(0, cursor.y + 1);
+        }else{
+            vidmem[cursor.x + cursor.y * width] = TxtChar(c, cur_attr).getValue();
+            if (cursor.x < width)
+            {
+                cursor.x++;
+            }
+            else
+            {
+                cursor.x = 0;
+                cursor.y++;
+            }
+        }
+    }
+    void moveCursor(int x, int y){
+        cursor.x = x;
+        cursor.y = y;
+    }
+    void setAttribute(TxtAttribute attribute){
+        cur_attr = attribute;
+    }
+    void clear(TxtChar tChar){
+        setAttribute(tChar.attribute);
+        for(int y = 0; y < height; y++){
+            for(int x = 0; x < width; x++){
+                moveCursor(x, y);
+                putChar(tChar.asciiChar);
+            }
+        }
+    }
+    void kprintf(char *str){
+        int i = 0;
+        while(str[i] != '\0'){
+            putChar(str[i]);
+            i++;
+        }
+    }
+}

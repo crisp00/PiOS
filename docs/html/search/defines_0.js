@@ -1,13 +1,12 @@
 var searchData=
 [
-  ['icw1_5ficw4',['ICW1_ICW4',['../pic_8hh.html#a964d12193d2b36e8a7ec7fa57438e313',1,'pic.hh']]],
-  ['icw1_5finit',['ICW1_INIT',['../pic_8hh.html#a286dc251f3d73c08e08a53a4696f31ef',1,'pic.hh']]],
-  ['icw1_5finterval4',['ICW1_INTERVAL4',['../pic_8hh.html#a6ba324062a88dc9ff1e2916abdcde17e',1,'pic.hh']]],
-  ['icw1_5flevel',['ICW1_LEVEL',['../pic_8hh.html#a8b06fbc75942c0a61e6ad80ea4736bd3',1,'pic.hh']]],
-  ['icw1_5fsingle',['ICW1_SINGLE',['../pic_8hh.html#a6c092603fb5e22cc80954531ae319d01',1,'pic.hh']]],
-  ['icw4_5f8086',['ICW4_8086',['../pic_8hh.html#a42803c5ddcec9e120a6dbf7bc5c1b7af',1,'pic.hh']]],
-  ['icw4_5fauto',['ICW4_AUTO',['../pic_8hh.html#a16777bf654a4c5630e4f53902a25235a',1,'pic.hh']]],
-  ['icw4_5fbuf_5fmaster',['ICW4_BUF_MASTER',['../pic_8hh.html#af3f1b53c727d98166710d198aca13411',1,'pic.hh']]],
-  ['icw4_5fbuf_5fslave',['ICW4_BUF_SLAVE',['../pic_8hh.html#af5443900cdd9096e97898e5584c316bb',1,'pic.hh']]],
-  ['icw4_5fsfnm',['ICW4_SFNM',['../pic_8hh.html#a0ecb67a3f71d1d10502fbd834b0292f1',1,'pic.hh']]]
+  ['bitmap_5farray_5fsize',['BITMAP_ARRAY_SIZE',['../pmm_8hh.html#a29cceca5f4eb436af2cd8b6a8b87ba98',1,'pmm.hh']]],
+  ['bitmap_5ffree',['BITMAP_FREE',['../pmm_8hh.html#a313921c345aa6084a33b61aa5378c16d',1,'pmm.hh']]],
+  ['bitmap_5flength',['BITMAP_LENGTH',['../pmm_8hh.html#a9acc4e3578a56d0a28557ed0698e7082',1,'pmm.hh']]],
+  ['bitmap_5fused',['BITMAP_USED',['../pmm_8hh.html#a985200be8ac62581ac9b272d50be5b3f',1,'pmm.hh']]],
+  ['block_5fheader_5flength',['BLOCK_HEADER_LENGTH',['../pmm_8hh.html#acc4770fe09b0843dfa43de464a65cad9',1,'pmm.hh']]],
+  ['block_5fheader_5fmagic',['BLOCK_HEADER_MAGIC',['../pmm_8hh.html#aecd2d6ab204449b1740bec8acedc5466',1,'pmm.hh']]],
+  ['block_5fmap_5flength',['BLOCK_MAP_LENGTH',['../pmm_8hh.html#a324949c5476146cbf7886bd351ff963e',1,'pmm.hh']]],
+  ['block_5fno_5fspace',['BLOCK_NO_SPACE',['../pmm_8hh.html#ad5e0db3b973d2feb3baafd858adb96d3',1,'pmm.hh']]],
+  ['block_5fspace_5flength',['BLOCK_SPACE_LENGTH',['../pmm_8hh.html#a68154861944e840da5a084a4afad190c',1,'pmm.hh']]]
 ];

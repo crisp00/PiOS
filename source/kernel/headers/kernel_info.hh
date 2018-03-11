@@ -1,6 +1,9 @@
 #include <stdint.h>
-
 #include "multiboot.hh"
+#include "../libh/txtconsole.hh"
+
+#ifndef PIOS_KERNEL_INFO
+#define PIOS_KERNEL_INFO
 
 struct mmap_entry
 {
@@ -16,3 +19,5 @@ struct multiboot_info{
     mmap_entry_t memory_map[100];
 
 } typedef multiboot_info_t;
+
+#endif

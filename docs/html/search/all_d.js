@@ -1,26 +1,5 @@
 var searchData=
 [
-  ['txt_5fcolor_5fblack',['TXT_COLOR_BLACK',['../txtconsole_8hh.html#a828c7dcc2432207ee7324e86670168c7',1,'txtconsole.hh']]],
-  ['txt_5fcolor_5fblue',['TXT_COLOR_BLUE',['../txtconsole_8hh.html#ac9c38f777083e3e87c3a09da535bc529',1,'txtconsole.hh']]],
-  ['txt_5fcolor_5fbrown',['TXT_COLOR_BROWN',['../txtconsole_8hh.html#a5bae2092486fbeacca7c0021428b21c7',1,'txtconsole.hh']]],
-  ['txt_5fcolor_5fcyan',['TXT_COLOR_CYAN',['../txtconsole_8hh.html#a55d2c774ca1c4d765c44e7c973ecb0da',1,'txtconsole.hh']]],
-  ['txt_5fcolor_5fdark_5fgray',['TXT_COLOR_DARK_GRAY',['../txtconsole_8hh.html#a20d759de05cb261e71ee32d90eb0f604',1,'txtconsole.hh']]],
-  ['txt_5fcolor_5fgreen',['TXT_COLOR_GREEN',['../txtconsole_8hh.html#af4b9d5459a9cf14538db43450587a40f',1,'txtconsole.hh']]],
-  ['txt_5fcolor_5flight_5fblue',['TXT_COLOR_LIGHT_BLUE',['../txtconsole_8hh.html#aed1017bfea2ddf738f288bfac473e814',1,'txtconsole.hh']]],
-  ['txt_5fcolor_5flight_5fcyan',['TXT_COLOR_LIGHT_CYAN',['../txtconsole_8hh.html#ab2dfdd4fbf19381d246d052958949978',1,'txtconsole.hh']]],
-  ['txt_5fcolor_5flight_5fgray',['TXT_COLOR_LIGHT_GRAY',['../txtconsole_8hh.html#a6e54649f868f63b21ad4f6fd7f098ab8',1,'txtconsole.hh']]],
-  ['txt_5fcolor_5flight_5fgreen',['TXT_COLOR_LIGHT_GREEN',['../txtconsole_8hh.html#a73efd36e47f9a7f8afe2dab9e5591199',1,'txtconsole.hh']]],
-  ['txt_5fcolor_5flight_5fmagenta',['TXT_COLOR_LIGHT_MAGENTA',['../txtconsole_8hh.html#a753676f06782d3803b018f2108b4a9ef',1,'txtconsole.hh']]],
-  ['txt_5fcolor_5flight_5fred',['TXT_COLOR_LIGHT_RED',['../txtconsole_8hh.html#a6839b0af29d9e7fcc33aa838edb736ec',1,'txtconsole.hh']]],
-  ['txt_5fcolor_5fmagenta',['TXT_COLOR_MAGENTA',['../txtconsole_8hh.html#a8ec9c99c5f789f11d63f94c5208c8a87',1,'txtconsole.hh']]],
-  ['txt_5fcolor_5fred',['TXT_COLOR_RED',['../txtconsole_8hh.html#a41044554e627d719987dac5f2fca2e1e',1,'txtconsole.hh']]],
-  ['txt_5fcolor_5fwhite',['TXT_COLOR_WHITE',['../txtconsole_8hh.html#aa50050963d68b799d5337a00f7e4485b',1,'txtconsole.hh']]],
-  ['txt_5fcolor_5fyellow',['TXT_COLOR_YELLOW',['../txtconsole_8hh.html#a18d593a8f2f0629d962c049655e4da11',1,'txtconsole.hh']]],
-  ['txtattribute',['TxtAttribute',['../class_txt_attribute.html',1,'TxtAttribute'],['../class_txt_attribute.html#a12d4c1e8fd1586f315a9865a26beaf33',1,'TxtAttribute::TxtAttribute()'],['../class_txt_attribute.html#a328aa522c45027489014679b4bc679d4',1,'TxtAttribute::TxtAttribute(uint8_t attribute)'],['../class_txt_attribute.html#aada0e3759c368546ed63db12de53183f',1,'TxtAttribute::TxtAttribute(uint8_t background, uint8_t foreground)']]],
-  ['txtchar',['TxtChar',['../class_txt_char.html',1,'TxtChar'],['../class_txt_char.html#a29eea9782c5de04b2ebd786789f7cbe2',1,'TxtChar::TxtChar(uint8_t asciiChar, uint8_t colorCode)'],['../class_txt_char.html#a3d240a34600a261a6c92955f48b0b02a',1,'TxtChar::TxtChar(uint8_t asciiChar, TxtAttribute attribute)']]],
-  ['txtconsole',['TxtConsole',['../class_txt_console.html',1,'TxtConsole'],['../class_txt_console.html#a9aae6da396ce83990900c29c76a12c93',1,'TxtConsole::TxtConsole()'],['../class_txt_console.html#a64cfdc73513a82064b33a17e4ce9e8f7',1,'TxtConsole::TxtConsole(int width, int height)']]],
-  ['txtconsole_2ecc',['txtconsole.cc',['../txtconsole_8cc.html',1,'']]],
-  ['txtconsole_2ehh',['txtconsole.hh',['../txtconsole_8hh.html',1,'']]],
-  ['txtcursor',['TxtCursor',['../class_txt_cursor.html',1,'']]],
-  ['type_5fattr',['type_attr',['../struct_i_d_t_descr__t.html#a27aa58320e143cae2fe0917ebd543928',1,'IDTDescr_t']]]
+  ['num',['num',['../structmultiboot__tag__elf__sections.html#ad31ac6e523f0a7d800c430ba4e5c40dc',1,'multiboot_tag_elf_sections']]],
+  ['number_5farray',['number_array',['../structtest__struct.html#a68d1e50012549926bbd7617e99bfee1c',1,'test_struct']]]
 ];

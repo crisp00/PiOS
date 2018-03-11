@@ -96,6 +96,8 @@ Functions</h2></td></tr>
 <tr class="separator:af2c0f95bdedc4d81b85aefdbf5dfce19"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae19bd40ad70d698198d020500fc66988"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="stdlib_8cc.html#ae19bd40ad70d698198d020500fc66988">itoa</a> (int num, char *str, int base)</td></tr>
 <tr class="separator:ae19bd40ad70d698198d020500fc66988"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6890c1eb40c1a0b9f1c39681858b1fb"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="stdlib_8cc.html#ae6890c1eb40c1a0b9f1c39681858b1fb">ulltoa</a> (unsigned long long num, char *str, int base)</td></tr>
+<tr class="separator:ae6890c1eb40c1a0b9f1c39681858b1fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="ae19bd40ad70d698198d020500fc66988"></a>
@@ -163,6 +165,43 @@ Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="stdlib_8cc_source.html#l00004">4</a> of file <a class="el" href="stdlib_8cc_source.html">stdlib.cc</a>.</p>
 <div class="fragment"><div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;{</div><div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;    <span class="keywordtype">int</span> start = 0;</div><div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;    <span class="keywordtype">int</span> end = length -1;</div><div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    <span class="keywordflow">while</span> (start &lt; end)</div><div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    {   </div><div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        <span class="keywordtype">int</span> c = *(str+start);</div><div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        *(str+start) = *(str+end);</div><div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        *(str+end) = c;</div><div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        start++;</div><div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        end--;</div><div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    }</div><div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;}</div></div><!-- fragment -->
+</div>
+</div>
+<a id="ae6890c1eb40c1a0b9f1c39681858b1fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6890c1eb40c1a0b9f1c39681858b1fb">&#9670;&nbsp;</a></span>ulltoa()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char* ulltoa </td>
+          <td>(</td>
+          <td class="paramtype">unsigned long long&#160;</td>
+          <td class="paramname"><em>num</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>base</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="stdlib_8cc_source.html#l00060">60</a> of file <a class="el" href="stdlib_8cc_source.html">stdlib.cc</a>.</p>
+<div class="fragment"><div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;{</div><div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keywordtype">int</span> i = 0;</div><div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordtype">bool</span> isNegative = <span class="keyword">false</span>;</div><div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div><div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="comment">/* Handle 0 explicitely, otherwise empty string is printed for 0 */</span></div><div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keywordflow">if</span> (num == 0)</div><div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    {</div><div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        str[i++] = <span class="charliteral">&#39;0&#39;</span>;</div><div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        str[i] = <span class="charliteral">&#39;\0&#39;</span>;</div><div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keywordflow">return</span> str;</div><div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    }</div><div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div><div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="comment">// Process individual digits</span></div><div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keywordflow">while</span> (num != 0)</div><div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    {</div><div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <span class="keywordtype">int</span> rem = num % base;</div><div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        str[i++] = (rem &gt; 9) ? (rem - 10) + <span class="charliteral">&#39;a&#39;</span> : rem + <span class="charliteral">&#39;0&#39;</span>;</div><div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        num = num / base;</div><div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    }</div><div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div><div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="comment">// If number is negative, append &#39;-&#39;</span></div><div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="keywordflow">if</span> (isNegative)</div><div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        str[i++] = <span class="charliteral">&#39;-&#39;</span>;</div><div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;</div><div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    str[i] = <span class="charliteral">&#39;\0&#39;</span>; <span class="comment">// Append string terminator</span></div><div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div><div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="comment">// Reverse the string</span></div><div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <a class="code" href="stdlib_8cc.html#af2c0f95bdedc4d81b85aefdbf5dfce19">reverse</a>(str, i);</div><div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;</div><div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keywordflow">return</span> str;</div><div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;}</div><div class="ttc" id="stdlib_8cc_html_af2c0f95bdedc4d81b85aefdbf5dfce19"><div class="ttname"><a href="stdlib_8cc.html#af2c0f95bdedc4d81b85aefdbf5dfce19">reverse</a></div><div class="ttdeci">void reverse(char str[], int length)</div><div class="ttdef"><b>Definition:</b> <a href="stdlib_8cc_source.html#l00004">stdlib.cc:4</a></div></div>
+</div><!-- fragment -->
 </div>
 </div>
 </div><!-- contents -->

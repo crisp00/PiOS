@@ -4,5 +4,6 @@ var dir_125beb24a912d8f75c5a81b27c5213ee =
     [ "gdt.cc", "gdt_8cc.html", null ],
     [ "hwio.cc", "hwio_8cc.html", "hwio_8cc" ],
     [ "idt.cc", "idt_8cc.html", "idt_8cc" ],
-    [ "pic.cc", "pic_8cc.html", "pic_8cc" ]
+    [ "pic.cc", "pic_8cc.html", "pic_8cc" ],
+    [ "pmm.cc", "pmm_8cc.html", "pmm_8cc" ]
 ];
