@@ -1,2 +1,0 @@
-
-void vmem_init();

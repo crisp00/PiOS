@@ -1,1 +1,0 @@
-boot/lib: boot/lib/A20.inc boot/lib/gdt.inc boot/lib/stdio.inc boot/lib/fat12.inc
