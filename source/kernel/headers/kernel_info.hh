@@ -20,4 +20,6 @@ struct multiboot_info{
 
 } typedef multiboot_info_t;
 
+template <typename type> type *kmalloc();
+
 #endif

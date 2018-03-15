@@ -26,14 +26,20 @@ PIOS_GDT:
 global PIOS_GDT_POINTER
 PIOS_GDT_POINTER: 
     dw PIOS_GDT_POINTER - PIOS_GDT - 1
-    dd PIOS_GDT
+    dd PIOS_GDT - 0xc0000000
 
-
+section .text
 global PIOS_install_gdt
 PIOS_install_gdt:
     cli
     pusha
-    lgdt [PIOS_GDT_POINTER]
-    sti
+    lgdt [PIOS_GDT_POINTER - 0xc0000000]
+    popa
+    ret
+
+PIOS_reinstall_gdt:
+    cli
+    pusha
+    lgdt [PIOS_GDT_POINTER - 0xc0000000]
     popa
     ret

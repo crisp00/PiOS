@@ -7,96 +7,21 @@
 #include "headers/kernel_info.hh"
 #include "hal/headers/pmm.hh"
 #include "hal/headers/serial.hh"
+#include "headers/tests.hh"
+#include "hal/headers/heap.hh"
 
 static char* tmp;
 void init_pic();
 void parse_multiboot_info(void *mb_info, multiboot_info_t *boot_info);
-
-struct test_struct{
-    uint32_t nums[600];
-}typedef lkj_t;
-
-struct test2_struct{
-    uint32_t nums[250];
-}typedef asd_t;
-
-template <typename type> type *kmalloc();
-
+void init(void *multiboot_info);
 
 multiboot_info_t boot_info;
 extern "C" void main(void *multiboot_info, unsigned int magic){
+    init(multiboot_info);
     txt::setcolor(TXT_COLOR_BLACK, TXT_COLOR_LIGHT_GRAY);
     txt::clearscreen();
-    serial::init();
-
-    install_idt();
-    init_pic();
-    asm("sti");
-
-    parse_multiboot_info(multiboot_info, &boot_info);
-    pmm::init(boot_info);
-    log("\n\n\n\n");
-    log("PiOS 2 (With SERIAL!)\n");
-    log("Interrupts installed, going good!\n");
-
-    log("\n\nMemory Map: \n");
-    bool done = false;
-    int i = 0;
-    while(!done){
-        mmap_entry_t cur = boot_info.memory_map[i];
-        if (cur.present)
-        {
-            log(" - #");
-            log(itoa(i, tmp, 10));
-            log(" Addr: ");
-            log(ulltoa(cur.addr, tmp, 10));
-            log(" Len: ");
-            log( ulltoa(cur.len, tmp, 10));
-            log(" Type: ");
-            log( itoa(cur.type, tmp, 16));
-            log("\n");
-        }else{
-            done = true;
-        }
-        i++;
-    }
-
-    bool x = pmm::bitmap_get(69);
-    pmm::bitmap_put(69, !x);
-    if(pmm::bitmap_get(69) != x) {
-        log("pmm PASS 1\n");
-    }
-    pmm::bitmap_put(69, x);
-    if(pmm::bitmap_get(69) == x) {
-        log("pmm PASS 2\n");
-    }
-
-
-    lkj_t *test1 = kmalloc<lkj_t>();
-    lkj_t *test2 = kmalloc<lkj_t>();
-    test1->nums[599] = 0xffffffffffffffff;
-    test2->nums[0] = 100;
-    log(itoa((int)test1, tmp, 10));
-    log(" ");
-    log(itoa((int)test2, tmp, 10));
-    log(" ");
-    log(itoa(test1->nums[599], tmp, 10));
-    log(" ");
-    log(itoa(test2->nums[0], tmp, 10));
-    log("\n");
-
-    asd_t *test3 = kmalloc<asd_t>();
-    asd_t *test4 = kmalloc<asd_t>();
-    test3->nums[249] = 0xffffffffffffffff;
-    test4->nums[0] = 100;
-    log(itoa((int)test3, tmp, 10));
-    log(" ");
-    log(itoa((int)test4, tmp, 10));
-    log(" ");
-    log(itoa(test3->nums[599], tmp, 10));
-    log(" ");
-    log(itoa(test4->nums[0], tmp, 10));
-    log("\n");
+    txt::gotoxy(0, 0);
+    log("PiOS kernel running");
 
 
     int count = 0;
@@ -105,6 +30,18 @@ extern "C" void main(void *multiboot_info, unsigned int magic){
         txt::putstring(itoa(count, tmp, 10));
         count++;
     }
+}
+
+void init(void *multiboot_info){
+    serial::init();
+    install_idt(true);
+    init_pic();
+    asm("sti");
+    parse_multiboot_info(multiboot_info, &boot_info);
+    pmm::init(boot_info);
+    vmm::init();
+    heap::init();
+    init_test();
 }
 
 void init_pic(){
@@ -149,9 +86,9 @@ void parse_multiboot_info(void *mb_info, multiboot_info_t *boot_info){
     }
 }
 
-template <typename type> type *kmalloc(){
+template <typename type> static type *kmalloc(){
     log("kmalloc()-> type size: ");
     log(itoa(sizeof(type), tmp, 10));
     log("\n");
-    return (type *)pmm::mem_alloc(sizeof(type));
+    return (type *)heap::mem_alloc(sizeof(type));
 }

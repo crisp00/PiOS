@@ -18,7 +18,7 @@ void reverse(char str[], int length)
 }
  
 // Implementation of itoa()
-char* itoa(int num, char* str, int base)
+char* itoa(uint64_t num, char* str, int base)
 {
     int i = 0;
     bool isNegative = false;

@@ -1,6 +1,9 @@
 #include <stdint.h>
 #include "../../headers/kernel_info.hh"
 
+#ifndef PIOS_PMM_HEADER
+#define PIOS_PMM_HEADER
+
 extern void *kernel_end;
 extern void *kernel_start;
 
@@ -10,37 +13,6 @@ namespace pmm{
 #define BITMAP_ARRAY_SIZE 131072
 #define BITMAP_USED true
 #define BITMAP_FREE false
-
-#define BLOCK_HEADER_MAGIC 0x2b4a
-#define BLOCK_HEADER_LENGTH sizeof 19
-#define BLOCK_MAP_LENGTH 453
-#define BLOCK_SPACE_LENGTH 3624
-
-#define BLOCK_NO_SPACE 0xf000
-
-struct __attribute__((packed)) pmm_block_map{
-    uint8_t map[BLOCK_MAP_LENGTH];
-}typedef block_map_t;
-
-typedef struct pmm_block block_t;
-
-/*! @brief This is the structure of a memory block's header. It's size is 
-
- */
-struct __attribute__((packed))  pmm_block_header{
-    uint32_t handle;
-    block_t *prev_block;
-    block_t *next_block;
-    uint16_t magic; 
-    uint32_t reserved;
-    uint8_t zero;
-}typedef block_header_t;
-
-struct __attribute__((packed)) pmm_block{
-    block_header_t header;
-    block_map_t map;
-    uint8_t space[BLOCK_SPACE_LENGTH];
-};
 
 
 /*! @brief Initializes the Memory Manager
@@ -98,20 +70,6 @@ int bitmap_count_free_blocks();
 
 void *mem_get_first_free_block();
 
-void *mem_alloc(int size);
-
-bool block_byte_get_state(block_t *block, uint16_t byte_index);
-
-void block_init(block_t *block);
-
-void block_byte_set_state(block_t *block, uint16_t byte_index, bool state);
-
-void block_byte_set_state_multiple(block_t *block, uint16_t byte_index, uint16_t count, bool state);
-
-/*! @brief 
-
-    @return 0xf000 if no such long contiguous space was found, otherwise returns the index of the first byte
-
- */
-uint16_t block_byte_get_contiguous(block_t *block, uint16_t count);
 }
+
+#endif

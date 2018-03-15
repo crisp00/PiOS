@@ -56,7 +56,70 @@ extern CINTHandle
 %endmacro
 
 %macro INTWRAP_ERR 1
-    pop errnum
+    push eax
+    mov eax, [esp + 4]
+    mov [errnum], eax
+    mov eax, [esp + 8]
+    mov [eipnum], eax
+    pusha
+    push ds
+    push es
+    push fs
+    push gs
+    mov ax, 10h
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
+    mov eax, esp
+
+    push DWORD [eipnum]
+    push DWORD [errnum]
+    push DWORD %1
+    mov eax, CINTHandle
+    call eax
+    add esp, 12
+    ; push DWORD intDoneMsg
+    ; mov eax, printf
+    ; call eax
+    ; add esp, 4
+
+    ; mov esp, eax
+    pop gs
+    pop fs
+    pop es
+    pop ds
+    popa
+    pop eax
+    add esp, 4
+    iretd
+%endmacro
+
+%macro INTWRAP_SAVETASK 1
+    push eax
+    mov [eax_], eax
+    mov eax, ebx
+    mov [ebx_], eax
+    mov eax, ecx
+    mov [ecx_], eax
+    mov eax, edx
+    mov [edx_], eax
+    mov eax, esi
+    mov [esi_], eax
+    mov eax, edi
+    mov [edi_], eax
+    mov eax, esp
+    add eax, 12
+    mov [esp_], eax
+    mov eax, ebp
+    mov [ebp_], eax
+    mov eax, [esp + 4]
+    mov [eip_], eax
+    pushfd
+    pop eax
+    mov [eflags_], eax
+    mov eax, cr3
+    mov [cr3_], eax
     pusha
     push ds
     push es
@@ -70,11 +133,12 @@ extern CINTHandle
     mov eax, esp
     push eax
 
-    push DWORD errnum
+    push DWORD eax_
+    push DWORD 0
     push DWORD %1
     mov eax, CINTHandle
     call eax
-    add esp, 4
+    add esp, 12
     ; push DWORD intDoneMsg
     ; mov eax, printf
     ; call eax
@@ -87,11 +151,49 @@ extern CINTHandle
     pop es
     pop ds
     popa
-    xchg bx, bx
+    pop eax
     iretd
 %endmacro
 
+global get_cpu_state
+get_cpu_state:
+    mov [eax_], eax
+    mov [ebx_], ebx
+    mov [ecx_], ecx
+    mov [edx_], edx
+
+    mov [esi_], esi
+    mov [edi_], edi
+    mov [esp_], esp
+    mov [ebp_], ebp
+    
+    mov eax, [esp]
+    mov [eip_], eax
+    pushfd
+    pop eax
+    mov [eflags_], eax
+    mov eax, cr3
+    mov [cr3_], eax
+    push eax_
+    ret
+
+task_tmp:
+    eax_ dd 0
+    ebx_ dd 0
+    ecx_ dd 0
+    edx_ dd 0
+    esi_ dd 0
+    edi_ dd 0
+    esp_ dd 0
+    ebp_ dd 0
+    eip_ dd 0
+    eflags_ dd 0
+    cr3_ dd 0
+
+
 errnum dd 0
+eipnum dd 0
+
 
 global INTSize
 
@@ -357,7 +459,7 @@ INTSize dd 0
 ESPSave dd 0
 intDoneMsg db "INTDONE", 10, 00
 
-
+section .text
 
 INT0: INTWRAP 0
 INT1: INTWRAP 1
@@ -372,8 +474,8 @@ INT9: INTWRAP 9
 INT10: INTWRAP 10
 INT11: INTWRAP 11
 INT12: INTWRAP 12
-INT13: INTWRAP 13
-INT14: INTWRAP 14
+INT13: INTWRAP_ERR 13
+INT14: INTWRAP_ERR 14
 INT15: INTWRAP 15
 INT16: INTWRAP 16
 INT17: INTWRAP 17
@@ -391,7 +493,7 @@ INT28: INTWRAP 28
 INT29: INTWRAP 29
 INT30: INTWRAP 30
 INT31: INTWRAP 31
-INT32: INTWRAP 32
+INT32: INTWRAP_SAVETASK 32
 INT33: INTWRAP 33
 INT34: INTWRAP 34
 INT35: INTWRAP 35

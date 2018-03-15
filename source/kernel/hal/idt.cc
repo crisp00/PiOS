@@ -1,7 +1,11 @@
 #include "headers/idt.hh"
 #include "headers/pic.hh"
+#include "headers/task.hh"
+#include "headers/heap.hh"
+#include "headers/serial.hh"
 
 #include "../libh/stdlib.hh"
+#include "../libh/txt.hh"
 
 // struct IDTDescr {
 //    uint16_t offset_1; // offset bits 0..15
@@ -11,13 +15,24 @@
 //    uint16_t offset_2; // offset bits 16..31
 // } typedef IDTDescr_t;
 
+using namespace task;
+
 typedef void (*fptr)();
 
-void fill_irqs();
+static bool debug = false;
 
-void install_idt(){
+task_t tasks[10];
+
+int task_num = 0;
+int current_task = -1;
+
+void fill_irqs();
+static void dlog(char *str);
+
+void install_idt(bool debug_){
     fill_irqs();    
     PIOS_install_idt();
+    debug = debug_;
 }
 
 void set_irq(int index, IDTDescr descr){
@@ -42,12 +57,125 @@ int count = 0;
 int pic_ticks = 0;
 int key_presses = 0;
 static char tmp[100];
-extern "C" void CINTHandle(int intnum, int errnum){
+
+int fun1_ = 0;
+int fun2_ = 1000000;
+
+void fun1(){
+    while(true){
+        serial::putstring("Fun1: ");
+        serial::putstring(itoa(fun1_, tmp, 10));
+        serial::putstring("\n");
+        task_t *state = get_cpu_state();
+        serial::putstring("Fun1 EIP: ");
+        serial::putstring(itoa((uint32_t)state, tmp, 10));
+        serial::putstring("\n");
+        // serial::putstring("Fun1 ESP: ");
+        // serial::putstring(itoa(state->esp, tmp, 10));
+        // serial::putstring("\n");
+
+        asm("NOP");
+        fun1_++;
+    }
+}
+
+void fun2(){
+    while(true){
+        log("Fun2: ");
+        log(itoa(fun2_, tmp, 10));
+        log("\n");
+        fun2_ += 1;
+    }
+}
+
+void init_test(){
+    tasks[0].eip = (uint32_t)&fun1;
+    tasks[0].eflags = 0x0202;
+    tasks[0].esp = (uint32_t)heap::mem_get_first_free_block();
+    tasks[1].eip = (uint32_t)&fun2;
+    tasks[1].eflags = 0x0202;
+    tasks[1].esp = (uint32_t)heap::mem_get_first_free_block();
+
+    task_num++;
+    current_task = 0;
+    task_num++;
+    task_switch((uint32_t)&tasks[0]);
+}
+
+extern "C" void CINTHandle(uint32_t intnum, uint32_t errnum, uint32_t eip_or_task){
     //TxtConsole console = *txt::getConsole();
     if (intnum >= 32 && intnum <= 48)
     {
         if(intnum == 32){
             pic_ticks++;
+            log("PIT TICK\n");
+            if(task_num > 1){
+                task_t *task = (task_t *)eip_or_task;
+                tasks[current_task].eax = task->eax;
+                tasks[current_task].ebx = task->ebx;
+                tasks[current_task].ecx = task->ecx;
+                tasks[current_task].edx = task->edx;
+                tasks[current_task].ebp = task->ebp;
+                tasks[current_task].esp = task->esp;
+                tasks[current_task].esi = task->esi;
+                tasks[current_task].edi = task->edi;
+                tasks[current_task].eflags = task->eflags;
+                tasks[current_task].eip = task->eip;
+                tasks[current_task].cr3 = task->cr3;
+
+                txt::gotoxy(0, 1);
+                log("Scheduler-> Switching from task N");
+                log(itoa(current_task, tmp, 16));
+                log("\n");
+
+                if(current_task < task_num - 1){
+                    current_task = current_task + 1;
+                }else{
+                    current_task = 0;
+                }
+
+                log("Scheduler-> Switching to task at: 0x");
+                log(itoa(tasks[current_task].eip, tmp, 16));
+                log("\n");
+                log("Scheduler-> EAX: 0x");
+                log(itoa(tasks[current_task].eax, tmp, 16));
+                log("\n");
+                log("Scheduler-> EBX: 0x");
+                log(itoa(tasks[current_task].ebx, tmp, 16));
+                log("\n");
+                log("Scheduler-> ECX: 0x");
+                log(itoa(tasks[current_task].ecx, tmp, 16));
+                log("\n");
+                log("Scheduler-> EDX: 0x");
+                log(itoa(tasks[current_task].edx, tmp, 16));
+                log("\n");
+
+                log("Scheduler-> ESI: 0x");
+                log(itoa(tasks[current_task].esi, tmp, 16));
+                log("\n");
+                log("Scheduler-> EDI: 0x");
+                log(itoa(tasks[current_task].edi, tmp, 16));
+                log("\n");
+                log("Scheduler-> ESP: 0x");
+                log(itoa(tasks[current_task].esp, tmp, 16));
+                log("\n");
+                log("Scheduler-> EBP: 0x");
+                log(itoa(tasks[current_task].ebp, tmp, 16));
+                log("\n");
+
+                log("Scheduler-> EFLAGS: 0x");
+                log(itoa(tasks[current_task].eflags, tmp, 16));
+                log("\n");
+                log("Scheduler-> CR3: 0x");
+                log(itoa(tasks[current_task].cr3, tmp, 16));
+                log("\n");
+                log("Scheduler-> Task state address: 0x");
+                log(itoa((uint32_t)&tasks[current_task], tmp, 16));
+                log("\n");
+
+                PIC_sendEOI(0);
+                task_switch((uint32_t)&tasks[current_task]);
+            }
             //console.moveCursor(5, 20);
             // console<<pic_ticks;
         }else if(intnum == 33){
@@ -55,18 +183,89 @@ extern "C" void CINTHandle(int intnum, int errnum){
             //console.moveCursor(5, 5);
             //console<<"kbd "<<key_presses;
         }
-        PIC_sendEOI(intnum);
+        PIC_sendEOI(intnum - 32);
     }else{
-        log("IDT-> INT ");
-        log(itoa(intnum, tmp, 10));
-        log("\n");
-        count++;
-        if(intnum == 80){
+         if(intnum == 6){
+            log("Invalid Opcode Fault at EIP: 0x");
+            log(itoa(eip_or_task, tmp, 16));
+            log("\n");
+        }else if(intnum == 13){
+            log("\n\nGeneral Protection Fault\n\n");
+            log("Error code: ");
+            log(itoa(errnum, tmp, 10));
+            log("\n");
+            bool external = (errnum & 1);
+            int table = (errnum & 0b110) >> 1;
+            uint16_t index = (errnum & 0b1111111111111000) >> 3;
+            log("External: ");
+            log(itoa(external, tmp, 10));
+            log("\nTable: ");
+            log(itoa(table, tmp, 10));
+            log("\nIndex: ");
+            log(itoa(index, tmp, 10));
+            log("\nEIP: 0x");
+            log(itoa(eip_or_task, tmp, 16));
+            log("\n\n");
+            asm("cli; hlt");
+        }else if(intnum == 14){
+            log("\n\nPage Fault:\n\n");
+            // log("Error code: ");
+            // log(itoa(errnum, tmp, 16));
+            // log("\n");
+            bool protection = errnum & 1;
+            bool write = (errnum & 2) > 0;
+            bool usermode = (errnum & 4) > 0;
+            bool reserved = (errnum & 8) > 0;
+            uint32_t vaddress = get_cr2();
+            // if(protection){
+            //     log("Caused by protection violation\n");
+            // }else{
+            //     log("Caused by missing page\n");
+            // }
+            // if(write){
+            //     log("While attempting to write\n");
+            // }else{
+            //     log("While attempting to read\n");
+            // }
+            // if(usermode){
+            //     log("By usermode code\n");
+            // }else{
+            //     log("By kernel code\n");
+            // }
+            if(reserved){
+                log("Some reserved bits are set in some paging-structure\n");
+            }
+            log("Trying to access address ");
+            log(itoa(vaddress, tmp, 16));
+            log("\n");
+            log("\nFrom EIP: 0x");
+            log(itoa(eip_or_task, tmp, 16));
+            log("\n\n");
+            // log("Trying to allocate page\n");
+            vmm::alloc_page(vaddress);
+            log("OK\n");
+            return;
+        }else if(intnum == 80){
             log("\n FATAL PIOS INTERNAL ERROR - SYSTEM HALTED");
             asm("cli;hlt");
+        }else{
+            log("IDT-> INT ");
+            log(itoa(intnum, tmp, 10));
+            log("\n");
         }
+        count++;
     }
     return;
+}
+
+static void dlog(char *str){
+    if(debug){
+        log(str);
+    }
+}
+
+extern "C" void num_log(uint32_t num){
+    log(itoa(num, tmp, 10));
 }
 
 void fill_irqs(){

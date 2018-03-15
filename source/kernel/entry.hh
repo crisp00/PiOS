@@ -1,6 +1,12 @@
+#include "hal/headers/vmm.hh"
+
 /*! \file entry.hh
     \brief mask to the kernel low level functions.
  */
+
+extern "C" uint32_t set_page_directory(uint32_t page);
+extern "C" void enable_paging();
+extern "C" uint32_t get_cr2();
 
 /*! \brief Descriptor structure of Interrupt Descriptor Table
 
