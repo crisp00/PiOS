@@ -10,8 +10,8 @@ static char tmp[100];
 static uint8_t *heap_bitmap = (uint8_t *) 0xc0400000;
 void heap::init(){
     heap::bitmap_unset_all();
-    //Set 0x0 to 0xC0200000 as used (reserved for userspace)
-    heap::bitmap_put_region(0, (uint32_t)&kernel_end + 100000, HEAP_BITMAP_USED);
+    //Set 0x0 to 0xC0200000 as used (reserved for userspace and kernel)
+    heap::bitmap_put_region(0, 0xc0800000, HEAP_BITMAP_USED);
     log("First Free: 0x");
     log(itoa((uint32_t)heap::mem_get_first_free_block(), tmp, 16));
     log("\n");
@@ -20,7 +20,7 @@ void heap::init(){
 }
 
 void heap::bitmap_put(unsigned int index, bool value){
-    if(index < HEAP_BLOCK_MAP_LENGTH){
+    if(index < HEAP_BITMAP_LENGTH){
         if(value){
             heap_bitmap[index / 8] = heap_bitmap[index / 8] | (1 << (index % 8));
         }else{
@@ -68,7 +68,7 @@ int heap::bitmap_count_free_blocks(){
     int free_blocks;
     for (int i = 0; i < HEAP_BITMAP_LENGTH; i++)
     {
-        if(!bitmap_get(i)){
+        if(!heap::bitmap_get(i)){
             free_blocks++;
         }
     }
@@ -78,7 +78,7 @@ int heap::bitmap_count_free_blocks(){
 void *heap::mem_get_first_free_block(){
     int i;
     for(i = 0; i < HEAP_BITMAP_LENGTH; i++){
-        if(!bitmap_get(i)){
+        if(!heap::bitmap_get(i)){
             heap::bitmap_put(i, HEAP_BITMAP_USED);
             return (void*)heap::bitmap_get_address_from_index(i);
         }

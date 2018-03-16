@@ -9,11 +9,14 @@
 #include "hal/headers/serial.hh"
 #include "headers/tests.hh"
 #include "hal/headers/heap.hh"
+#include "hal/headers/task.hh"
 
 static char* tmp;
 void init_pic();
 void parse_multiboot_info(void *mb_info, multiboot_info_t *boot_info);
 void init(void *multiboot_info);
+void task1();
+void task2();
 
 multiboot_info_t boot_info;
 extern "C" void main(void *multiboot_info, unsigned int magic){
@@ -21,9 +24,10 @@ extern "C" void main(void *multiboot_info, unsigned int magic){
     txt::setcolor(TXT_COLOR_BLACK, TXT_COLOR_LIGHT_GRAY);
     txt::clearscreen();
     txt::gotoxy(0, 0);
-    log("PiOS kernel running");
+    log("PiOS kernel running\n");
 
-
+    task::add(task::create(&task2));
+    task::add(task::create(&task1));
     int count = 0;
     while(true){
         txt::gotoxy(70, 20);
@@ -32,7 +36,35 @@ extern "C" void main(void *multiboot_info, unsigned int magic){
     }
 }
 
+uint64_t c2 = -1;
+char tmp2[100];
+void task2(){
+    while(true){
+        serial::putstring("task2 ");
+        serial::putstring(itoa(c2, tmp, 10));
+        serial::putstring("\n");
+        txt::gotoxy(0, 2);
+        txt::putstring("Task2: ");
+        txt::putstring(itoa(c2, tmp2, 10));
+        c2++;
+    }
+}
+
+uint64_t c1 = 0;
+void task1(){
+    while(true){
+        serial::putstring("task1 ");
+        serial::putstring(itoa(c1, tmp, 10));
+        serial::putstring("\n");
+        txt::gotoxy(0, 0);
+        txt::putstring("Task1: ");
+        txt::putstring(itoa(c1, tmp, 10));
+        c1++;
+    }
+}
+
 void init(void *multiboot_info){
+    log("\n\n\n\n\n\nPiOS kernel starting up\n");
     serial::init();
     install_idt(true);
     init_pic();

@@ -16,6 +16,44 @@ PIOS_install_idt:
     lidt [PIOS_IDTR]
     ret
 
+global get_cpu_state
+get_cpu_state:
+    mov [eax_], eax
+    mov [ebx_], ebx
+    mov [ecx_], ecx
+    mov [edx_], edx
+
+    mov [esi_], esi
+    mov [edi_], edi
+    mov [esp_], esp
+    mov [ebp_], ebp
+    
+    mov eax, [esp]
+    mov [eip_], eax
+    pushfd
+    pop eax
+    mov [eflags_], eax
+    mov eax, cr3
+    mov [cr3_], eax
+    mov eax, eax_
+    ret
+
+global set_cpu_state
+set_cpu_state:
+    mov eax, [esp + 4]
+    mov ebx, [eax + 4]
+    mov ecx, [eax + 8]
+    mov edx, [eax + 12]
+
+    mov esi, [eax + 16]
+    mov edi, [eax + 20]
+    mov esp, [eax + 24]
+    mov ebp, [eax + 28]
+    push dword [eax + 32]
+    popfd
+    mov eax, [eax]
+    ret
+
 section .idt
 
 
@@ -95,101 +133,40 @@ extern CINTHandle
     iretd
 %endmacro
 
-%macro INTWRAP_SAVETASK 1
+%macro INTWRAP_SAVETASK 1  
     push eax
-    mov [eax_], eax
-    mov eax, ebx
-    mov [ebx_], eax
-    mov eax, ecx
-    mov [ecx_], eax
-    mov eax, edx
-    mov [edx_], eax
-    mov eax, esi
-    mov [esi_], eax
-    mov eax, edi
-    mov [edi_], eax
-    mov eax, esp
-    add eax, 12
-    mov [esp_], eax
-    mov eax, ebp
-    mov [ebp_], eax
-    mov eax, [esp + 4]
-    mov [eip_], eax
-    pushfd
-    pop eax
-    mov [eflags_], eax
-    mov eax, cr3
-    mov [cr3_], eax
-    pusha
+    push ebx
+    push ecx
+    push edx
+    push esi
+    push edi
+    push ebp
     push ds
     push es
     push fs
     push gs
-    mov ax, 10h
-    mov ds, ax
-    mov es, ax
-    mov fs, ax
-    mov gs, ax
-    mov eax, esp
-    push eax
+    mov [esp_], esp
 
-    push DWORD eax_
-    push DWORD 0
-    push DWORD %1
+    push dword eax_
+    push dword 0
+    push dword %1
     mov eax, CINTHandle
     call eax
-    add esp, 12
-    ; push DWORD intDoneMsg
-    ; mov eax, printf
-    ; call eax
-    ; add esp, 4
 
-    pop eax
-    ; mov esp, eax
+    mov esp, [esp_]
     pop gs
     pop fs
     pop es
     pop ds
-    popa
+    pop ebp
+    pop edi
+    pop esi
+    pop edx
+    pop ecx
+    pop ebx
     pop eax
-    iretd
+    iret
 %endmacro
-
-global get_cpu_state
-get_cpu_state:
-    mov [eax_], eax
-    mov [ebx_], ebx
-    mov [ecx_], ecx
-    mov [edx_], edx
-
-    mov [esi_], esi
-    mov [edi_], edi
-    mov [esp_], esp
-    mov [ebp_], ebp
-    
-    mov eax, [esp]
-    mov [eip_], eax
-    pushfd
-    pop eax
-    mov [eflags_], eax
-    mov eax, cr3
-    mov [cr3_], eax
-    push eax_
-    ret
-
-task_tmp:
-    eax_ dd 0
-    ebx_ dd 0
-    ecx_ dd 0
-    edx_ dd 0
-    esi_ dd 0
-    edi_ dd 0
-    esp_ dd 0
-    ebp_ dd 0
-    eip_ dd 0
-    eflags_ dd 0
-    cr3_ dd 0
-
 
 errnum dd 0
 eipnum dd 0

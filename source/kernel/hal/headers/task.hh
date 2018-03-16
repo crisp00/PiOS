@@ -1,6 +1,9 @@
 #include <stdint.h>
 
 namespace task{
+    typedef void (*function_ptr_t)();
+
+
     __attribute__((packed)) struct task{
         uint32_t    eax, //offset
                     ebx, //4
@@ -13,11 +16,17 @@ namespace task{
                     eip, //32
                     eflags, //36
                     cr3; //40
+        bool initialized = false;
+        bool ended = false;
     }typedef task_t;
 
-    task_t *get_task(int index);
-    void add_task();
+    task_t *create(function_ptr_t function_ptr);
+    uint32_t add(task_t *task);
+    void update_current(task_t *current);
+    void schedule();
 }
 
-extern "C" void task_switch(int32_t state);
+extern "C" void task_switch(uint32_t esp);
+extern "C" void task_start(task::task_t * state);
 extern "C" task::task_t *get_cpu_state();
+extern "C" void set_cpu_state(task::task_t *state);
