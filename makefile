@@ -26,7 +26,7 @@ clean:
 # OS Image
 
 build/pios.iso: 	build/isofiles/boot/pi_kernel.bin
-			grub2-mkrescue -o build/pios.iso build/isofiles
+			grub-mkrescue -o build/pios.iso build/isofiles
 
 build/isofiles/boot/pi_kernel.bin: 	build/kernel/pi_kernel.bin
 	cp $< build/isofiles/boot/

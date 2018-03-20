@@ -10,6 +10,7 @@
 #include "headers/tests.hh"
 #include "hal/headers/heap.hh"
 #include "hal/headers/task.hh"
+#include "hal/headers/pit.hh"
 
 static char* tmp;
 void init_pic();
@@ -17,6 +18,7 @@ void parse_multiboot_info(void *mb_info, multiboot_info_t *boot_info);
 void init(void *multiboot_info);
 void task1();
 void task2();
+void task3();
 
 multiboot_info_t boot_info;
 extern "C" void main(void *multiboot_info, unsigned int magic){
@@ -26,8 +28,10 @@ extern "C" void main(void *multiboot_info, unsigned int magic){
     txt::gotoxy(0, 0);
     log("PiOS kernel running\n");
 
-    task::add(task::create(&task2));
     task::add(task::create(&task1));
+    task::add(task::create(&task2));
+    task::add(task::create(&task3));
+    task::enable();
     int count = 0;
     while(true){
         txt::gotoxy(70, 20);
@@ -36,30 +40,43 @@ extern "C" void main(void *multiboot_info, unsigned int magic){
     }
 }
 
-uint64_t c2 = -1;
+uint64_t c2 = 0;
 char tmp2[100];
 void task2(){
+    TxtConsole console = TxtConsole();
     while(true){
+        task::sleep(50000);
         serial::putstring("task2 ");
         serial::putstring(itoa(c2, tmp, 10));
         serial::putstring("\n");
-        txt::gotoxy(0, 2);
-        txt::putstring("Task2: ");
-        txt::putstring(itoa(c2, tmp2, 10));
+        console.moveCursor(0, 2);
+        console<<"Task2: ";
+        console<<itoa(c2, tmp2, 16);
         c2++;
     }
 }
 
 uint64_t c1 = 0;
 void task1(){
+    TxtConsole console = TxtConsole();
     while(true){
         serial::putstring("task1 ");
         serial::putstring(itoa(c1, tmp, 10));
         serial::putstring("\n");
-        txt::gotoxy(0, 0);
-        txt::putstring("Task1: ");
-        txt::putstring(itoa(c1, tmp, 10));
+        console.moveCursor(0, 0);
+        console<<"Task1: ";
+        console<<itoa(c1, tmp, 10);
         c1++;
+    }
+}
+
+char tmp3[100];
+void task3(){
+    TxtConsole console = TxtConsole();
+    while(true){
+        console.moveCursor(0, 4);
+        console<<"PIT Ticks: ";
+        console<<itoa(pit::millis(), tmp3, 10);
     }
 }
 
@@ -68,12 +85,12 @@ void init(void *multiboot_info){
     serial::init();
     install_idt(true);
     init_pic();
+    pit::init();
     asm("sti");
     parse_multiboot_info(multiboot_info, &boot_info);
     pmm::init(boot_info);
     vmm::init();
     heap::init();
-    init_test();
 }
 
 void init_pic(){

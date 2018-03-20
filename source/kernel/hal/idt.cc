@@ -3,6 +3,7 @@
 #include "headers/task.hh"
 #include "headers/heap.hh"
 #include "headers/serial.hh"
+#include "headers/pit.hh"
 
 #include "../libh/stdlib.hh"
 #include "../libh/txt.hh"
@@ -54,165 +55,14 @@ IDTDescr_t makeDescriptor(uint32_t addr, uint16_t selector){
 }
 
 int count = 0;
-int pic_ticks = 0;
 int key_presses = 0;
 static char tmp[100];
-
-int fun1_ = 0;
-int fun2_ = 1000000;
-
-task_t *test_task;
-void fun1(){
-    while(true){
-        task_t *state = get_cpu_state();
-        serial::putstring("Fun1: ");
-        serial::putstring(itoa(fun1_, tmp, 10));
-        serial::putstring("\n");
-        // serial::putstring("Fun1 EAX: 0x");
-        // serial::putstring(itoa(state->eax, tmp, 16));
-        // serial::putstring("\n");
-        // serial::putstring("Fun1 EBX: 0x");
-        // serial::putstring(itoa(state->ebx, tmp, 16));
-        // serial::putstring("\n");
-        // serial::putstring("Fun1 ECX: 0x");
-        // serial::putstring(itoa(state->ecx, tmp, 16));
-        // serial::putstring("\n");
-        // serial::putstring("Fun1 EDX: 0x");
-        // serial::putstring(itoa(state->edx, tmp, 16));
-        // serial::putstring("\n");
-        // serial::putstring("Fun1 ESI: 0x");
-        // serial::putstring(itoa(state->esi, tmp, 16));
-        // serial::putstring("\n");
-        // serial::putstring("Fun1 EDI: 0x");
-        // serial::putstring(itoa(state->edi, tmp, 16));
-        // serial::putstring("\n");
-        // serial::putstring("Fun1 EBP: 0x");
-        // serial::putstring(itoa(state->ebp, tmp, 16));
-        // serial::putstring("\n");
-        // serial::putstring("Fun1 CR3: 0x");
-        // serial::putstring(itoa(state->cr3, tmp, 16));
-        // serial::putstring("\n");
-        // serial::putstring("Fun1 EIP: 0x");
-        // serial::putstring(itoa(state->eip, tmp, 16));
-        // serial::putstring("\n");
-        serial::putstring("Fun1 ESP: 0x");
-        serial::putstring(itoa(state->esp, tmp, 16));
-        serial::putstring("\n");
-        // serial::putstring("Fun1 EFLAGS: 0x");
-        // serial::putstring(itoa(state->eflags, tmp, 16));
-        // serial::putstring("\n");
-
-        txt::gotoxy(10, 23);
-        log("Task1: ");
-        log(itoa(fun1_, tmp, 10));
-
-        fun1_++;
-        // test_task->eax = 1;
-        // test_task->ebx = 2;
-        // test_task->ecx = 3;
-        // test_task->edx = 4;
-
-        // test_task->esi = 69;
-        // test_task->edi = 69;
-        // test_task->esp = state->esp;
-        // test_task->ebp = 69;
-
-        // test_task->eflags = 0x202;
-        //set_cpu_state(test_task);
-    }
-}
-
-void fun2(){
-    while(true){
-        task_t *state = get_cpu_state();
-        // serial::putstring("Fun2: ");
-        // serial::putstring(itoa(fun2_, tmp, 10));
-        // serial::putstring("\n");
-        // serial::putstring("Fun2 EAX: 0x");
-        // serial::putstring(itoa(state->eax, tmp, 16));
-        // serial::putstring("\n");
-        // serial::putstring("Fun2 EBX: 0x");
-        // serial::putstring(itoa(state->ebx, tmp, 16));
-        // serial::putstring("\n");
-        // serial::putstring("Fun2 ECX: 0x");
-        // serial::putstring(itoa(state->ecx, tmp, 16));
-        // serial::putstring("\n");
-        // serial::putstring("Fun2 EDX: 0x");
-        // serial::putstring(itoa(state->edx, tmp, 16));
-        // serial::putstring("\n");
-        // serial::putstring("Fun2 ESI: 0x");
-        // serial::putstring(itoa(state->esi, tmp, 16));
-        // serial::putstring("\n");
-        // serial::putstring("Fun2 EDI: 0x");
-        // serial::putstring(itoa(state->edi, tmp, 16));
-        // serial::putstring("\n");
-        // serial::putstring("Fun2 EBP: 0x");
-        // serial::putstring(itoa(state->ebp, tmp, 16));
-        // serial::putstring("\n");
-        // serial::putstring("Fun2 CR3: 0x");
-        // serial::putstring(itoa(state->cr3, tmp, 16));
-        // serial::putstring("\n");
-        // serial::putstring("Fun2 EIP: 0x");
-        // serial::putstring(itoa(state->eip, tmp, 16));
-        // serial::putstring("\n");
-        // serial::putstring("Fun2 ESP: 0x");
-        // serial::putstring(itoa(state->esp, tmp, 16));
-        // serial::putstring("\n");
-        // serial::putstring("Fun2 EFLAGS: 0x");
-        // serial::putstring(itoa(state->eflags, tmp, 16));
-        // serial::putstring("\n");
-
-        txt::gotoxy(50, 23);
-        txt::putstring("Task2: ");
-        txt::putstring(itoa(fun2_, tmp, 10));
-
-        fun2_++;
-        // test_task->eax = 1;
-        // test_task->ebx = 2;
-        // test_task->ecx = 3;
-        // test_task->edx = 4;
-
-        // test_task->esi = 69;
-        // test_task->edi = 69;
-        // test_task->esp = state->esp;
-        // test_task->ebp = 69;
-
-        // test_task->eflags = 0x202;
-        //set_cpu_state(test_task);
-    }
-
-}
-
-void init_test(){
-    log("task array located at: 0x");
-    log(itoa((uint32_t)&tasks, tmp, 16));
-    log("\n");
-    tasks[0].eip = (uint32_t)&fun1;
-    tasks[0].eflags = 0x0202;
-    tasks[0].esp = (uint32_t)heap::mem_get_first_free_block() + 4095;
-    *((int *)tasks[0].esp) = 0;
-    log("task1 eip: 0x");
-    log(itoa(tasks[0].eip, tmp, 16));
-    log("\n");
-    tasks[1].eip = (uint32_t)&fun2;
-    tasks[1].eflags = 0x0202;
-    tasks[1].esp = (uint32_t)heap::mem_get_first_free_block() + 4095;
-    *((int *)tasks[1].esp) = 0;
-    log("task2 stack: 0x");
-    log(itoa(tasks[1].esp, tmp, 16));
-    log("\n");
-
-    task_num++;
-    current_task = 0;
-    task_num++;
-    return;
-}
 
 extern "C" void CINTHandle(uint32_t intnum, uint32_t errnum, uint32_t eip_or_task){
     if (intnum >= 32 && intnum <= 48)
     {
         if(intnum == 32){
-            pic_ticks++;
+            pit::tick();
             task_t *task = (task_t *)eip_or_task;
             task::update_current(task);
             PIC_sendEOI(0);
